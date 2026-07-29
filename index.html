@@ -25,18 +25,15 @@
   body{ font-family:'Inter', sans-serif; background:#08090c; }
   h1,h2,h3,.display{ font-family:'Manrope', sans-serif; }
   .mono{ font-family:'IBM Plex Mono', monospace; }
-
   ::-webkit-scrollbar{ width:8px; }
   ::-webkit-scrollbar-track{ background:#0a0b0e; }
   ::-webkit-scrollbar-thumb{ background:#1c2027; border-radius:4px; }
   ::-webkit-scrollbar-thumb:hover{ background:#f59e0b; }
-
   .nav-link{ position:relative; color:#8b93a1; }
   .nav-link::after{ content:''; position:absolute; left:0; bottom:-6px; width:0%; height:2px; background:#f59e0b; transition:width .25s ease; }
   .nav-link:hover{ color:#fbbf6e; }
   .nav-link.active{ color:#fbbf6e; }
   .nav-link.active::after{ width:100%; }
-
   .grid-bg{
     background-image:
       linear-gradient(to right, #14171c 1px, transparent 1px),
@@ -45,17 +42,13 @@
     -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 0%, #000 65%, transparent 100%);
             mask-image: radial-gradient(ellipse 65% 55% at 50% 0%, #000 65%, transparent 100%);
   }
-
   .glow{ box-shadow: 0 0 30px rgba(245,158,11,0.10); }
-  .glow-hover:hover{ box-shadow: 0 0 40px rgba(245,158,11,0.16); border-color: rgba(245,158,11,0.4) !important; }
-
+  .glow-hover{ transition: box-shadow .3s ease, border-color .3s ease; }
+  .glow-hover:hover{ box-shadow: 0 0 55px rgba(245,158,11,.22), 0 0 0 1px rgba(245,158,11,.35) inset; border-color: rgba(245,158,11,0.4) !important; }
   .status-dot{ box-shadow:0 0 0 0 rgba(34,197,94,.7); animation:pulseDot 2s infinite; }
   @keyframes pulseDot{ 0%{box-shadow:0 0 0 0 rgba(34,197,94,.6);} 70%{box-shadow:0 0 0 9px rgba(34,197,94,0);} 100%{box-shadow:0 0 0 0 rgba(34,197,94,0);} }
-
   .caret{ animation: blink 1s step-end infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
-
-  /* Signal waveform (signature hero element) */
   .signal-path{
     stroke-dasharray: 1400;
     stroke-dashoffset: 1400;
@@ -67,28 +60,54 @@
     55%{ stroke-dashoffset: 0; }
     100%{ stroke-dashoffset: -1400; }
   }
-  .sweep{
-    animation: sweepMove 3.2s linear infinite;
-  }
+  .sweep{ animation: sweepMove 3.2s linear infinite; }
   @keyframes sweepMove{
     0%{ transform: translateX(-40px); opacity:0; }
     10%{ opacity:1; }
     90%{ opacity:1; }
     100%{ transform: translateX(660px); opacity:0; }
   }
-
   .card-hover{ transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; }
-  .card-hover:hover{ transform: translateY(-4px); }
-
+  .card-hover:hover{ transform: translateY(-6px) scale(1.015); }
   .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in{ opacity:1; transform:none; }
+  #scrollProgress{
+    position:fixed; top:0; left:0; height:3px; width:0%;
+    background:linear-gradient(90deg,#f59e0b,#5b90f0);
+    z-index:60; transition: width .1s ease;
+  }
+  .gradient-name{
+    background: linear-gradient(90deg,#fbbf6e,#f59e0b,#5b90f0,#fbbf6e);
+    background-size: 300% auto;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation: gradientShift 6s ease infinite;
+  }
+  @keyframes gradientShift{ 0%{background-position:0% 50%;} 50%{background-position:100% 50%;} 100%{background-position:0% 50%;} }
+  .blob{ position:fixed; border-radius:50%; filter:blur(80px); opacity:.30; z-index:0; pointer-events:none; animation: float 12s ease-in-out infinite; }
+  .blob-1{ width:380px; height:380px; background:#f59e0b; top:-100px; left:-100px; }
+  .blob-2{ width:420px; height:420px; background:#3b6fd6; top:200px; right:-140px; animation-delay:2s; }
+  .blob-3{ width:340px; height:340px; background:#f59e0b; bottom:-120px; left:30%; animation-delay:4s; opacity:.18; }
+  @keyframes float{ 0%,100%{ transform:translateY(0) translateX(0); } 50%{ transform:translateY(-30px) translateX(20px); } }
+  .btn-magnetic{ transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease; }
+  .btn-magnetic:hover{ transform: translateY(-3px) scale(1.04); box-shadow: 0 12px 30px rgba(245,158,11,.35); }
+  .cursor-glow{
+    position:absolute; inset:0; pointer-events:none; z-index:1;
+    background: radial-gradient(300px circle at var(--x,50%) var(--y,50%), rgba(245,158,11,0.10), transparent 70%);
+    transition: background .1s ease;
+  }
+  .badge-glow{ box-shadow: 0 0 20px rgba(245,158,11,0.15); }
+  .section-tag{ position:relative; padding-left:14px; }
+  .section-tag::before{ content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:6px; height:6px; border-radius:50%; background:#f59e0b; box-shadow:0 0 12px rgba(245,158,11,.8); }
 </style>
 </head>
 <body class="text-slate-300 overflow-x-hidden">
 
+<div id="scrollProgress"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
 <div class="fixed inset-0 grid-bg pointer-events-none z-0"></div>
 
-<!-- Nav -->
 <nav class="fixed top-0 w-full bg-[#08090c]/85 backdrop-blur-md border-b border-white/5 z-50 px-6 py-4">
   <div class="max-w-6xl mx-auto flex justify-between items-center">
     <a href="#top" class="text-white font-bold text-lg tracking-wide display">MOHAMMAD<span class="text-ember-400">.BHAT</span></a>
@@ -99,26 +118,22 @@
       <a href="#projects" class="nav-link pb-1" data-nav>Projects</a>
       <a href="#contact" class="nav-link pb-1" data-nav>Contact</a>
     </div>
-    <a href="mailto:himayatb3@gmail.com" class="border border-ember-400/50 text-ember-400 px-4 py-2 rounded text-sm hover:bg-ember-400 hover:text-[#08090c] transition duration-300 tracking-wide hidden sm:block">
+    <a href="mailto:himayatb3@gmail.com" class="btn-magnetic border border-ember-400/50 text-ember-400 px-4 py-2 rounded text-sm hover:bg-ember-400 hover:text-[#08090c] transition-colors duration-300 tracking-wide hidden sm:block">
       Get In Touch
     </a>
   </div>
 </nav>
 
-<!-- Hero -->
 <section id="top" class="about relative min-h-screen flex items-center justify-center pt-28 pb-16 z-10 px-6">
   <div class="max-w-6xl mx-auto w-full">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-
-      <!-- Left -->
       <div id="about" class="lg:col-span-7 space-y-6">
-        <div class="inline-flex items-center gap-2 bg-ember-400/10 border border-ember-400/25 px-4 py-1.5 rounded-full text-xs text-ember-300 mono tracking-wider">
+        <div class="inline-flex items-center gap-2 bg-ember-400/10 border border-ember-400/25 px-4 py-1.5 rounded-full text-xs text-ember-300 mono tracking-wider badge-glow">
           <span class="w-2 h-2 rounded-full bg-emerald-400 status-dot"></span>
           DUBAI, UAE &nbsp;·&nbsp; OPEN TO OPPORTUNITIES
         </div>
-
-        <h1 class="text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold text-white leading-[1.08] tracking-tight display">
-          Mohammad Himayat<br>Ullah Bhat
+        <h1 class="text-4xl md:text-5xl lg:text-[3.4rem] font-extrabold leading-[1.08] tracking-tight display">
+          <span class="gradient-name">Mohammad Himayat<br>Ullah Bhat</span>
         </h1>
         <p class="text-lg md:text-xl text-slate-400 font-medium">
           Full Stack Developer building <span class="text-white">safety-critical systems</span> that UAE Civil Defence relies on.
@@ -127,28 +142,25 @@
           2+ years shipping enterprise-grade platforms across .NET Core, Angular, and SQL Server — from
           real-time IoT fire-alarm monitoring to HSE incident management used across national operations.
         </p>
-
         <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 pt-1 text-sm mono text-slate-400 max-w-md">
           <a href="mailto:himayatb3@gmail.com" class="flex items-center gap-2 hover:text-ember-300 transition-colors"><i class="fas fa-envelope text-ember-400 w-5"></i> himayatb3@gmail.com</a>
           <a href="tel:+971561452089" class="flex items-center gap-2 hover:text-ember-300 transition-colors"><i class="fas fa-phone-alt text-ember-400 w-5"></i> +971-56-1452089</a>
           <a href="https://www.linkedin.com/in/himayat-bhat" target="_blank" class="flex items-center gap-2 hover:text-ember-300 transition-colors"><i class="fa-brands fa-linkedin text-ember-400 w-5"></i> in/himayat-bhat</a>
           <span class="flex items-center gap-2 text-slate-500"><i class="fas fa-location-dot text-ember-400 w-5"></i> Dubai, UAE</span>
         </div>
-
         <div class="flex flex-wrap gap-4 pt-2">
-          <a href="#projects" class="bg-gradient-to-r from-ember-500 to-ember-400 hover:from-ember-400 hover:to-ember-300 text-[#08090c] font-bold px-7 py-3 rounded shadow-[0_0_20px_rgba(245,158,11,0.25)] transition-all duration-300 transform hover:-translate-y-1">
+          <a href="#projects" class="btn-magnetic bg-gradient-to-r from-ember-500 to-ember-400 hover:from-ember-400 hover:to-ember-300 text-[#08090c] font-bold px-7 py-3 rounded shadow-[0_0_20px_rgba(245,158,11,0.25)]">
             View Projects
           </a>
-          <a href="#experience" class="bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-steel-400/40 text-white font-semibold px-7 py-3 rounded transition-all duration-300 flex items-center gap-2 transform hover:-translate-y-1">
+          <a href="#experience" class="btn-magnetic bg-white/[0.03] hover:bg-white/[0.06] border border-white/10 hover:border-steel-400/40 text-white font-semibold px-7 py-3 rounded flex items-center gap-2">
             <i class="fas fa-briefcase text-steel-400"></i> Experience
           </a>
         </div>
       </div>
-
-      <!-- Right: signal / sensor monitor panel (signature element) -->
       <div class="lg:col-span-5">
-        <div class="bg-[#0d0f13] border border-white/10 rounded-2xl overflow-hidden glow relative">
-          <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/30">
+        <div id="heroPanel" class="bg-[#0d0f13] border border-white/10 rounded-2xl overflow-hidden glow relative">
+          <div class="cursor-glow" id="cursorGlow"></div>
+          <div class="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/30 relative z-10">
             <div class="flex items-center gap-2">
               <span class="w-2.5 h-2.5 rounded-full bg-red-500/60"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-ember-400/60"></span>
@@ -156,7 +168,6 @@
             </div>
             <span class="mono text-[10px] text-slate-500">aigorizm — live monitor</span>
           </div>
-
           <div class="relative h-40 border-b border-white/10 overflow-hidden bg-gradient-to-b from-ember-950/40 to-transparent">
             <svg viewBox="0 0 660 160" class="absolute inset-0 w-full h-full" preserveAspectRatio="none">
               <line x1="0" y1="80" x2="660" y2="80" stroke="#1c2027" stroke-width="1"/>
@@ -167,16 +178,14 @@
             <div class="absolute top-3 left-4 mono text-[10px] text-emerald-400">● ALERT CLASSIFIED: NORMAL</div>
             <div class="absolute bottom-3 right-4 mono text-[10px] text-slate-500">Sensor Node 04A</div>
           </div>
-
-          <div class="p-5 mono text-xs leading-relaxed">
+          <div class="p-5 mono text-xs leading-relaxed relative z-10">
             <p class="text-slate-500">&gt; deploy --stack=aspnet-core,angular,sql-server</p>
             <p class="text-emerald-400 mt-1">✓ JWT auth verified</p>
             <p class="text-emerald-400">✓ CI/CD pipeline: AWS CodePipeline</p>
             <p class="text-emerald-400">✓ SignalR channel connected</p>
             <p class="text-white mt-2" id="typedLine">Deployed to production <span class="caret">▌</span></p>
           </div>
-
-          <div class="grid grid-cols-3 gap-px bg-white/5">
+          <div class="grid grid-cols-3 gap-px bg-white/5 relative z-10">
             <div class="bg-[#0d0f13] p-3 text-center">
               <p class="text-lg font-bold text-white display">2<span class="text-ember-400">+</span></p>
               <p class="text-[9px] uppercase tracking-widest text-slate-500 mono mt-0.5">Years Exp.</p>
@@ -196,47 +205,39 @@
   </div>
 </section>
 
-<!-- Skills -->
 <section id="skills" class="py-24 bg-[#0a0c10] border-y border-white/5 relative z-10 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="max-w-2xl mb-14">
-      <span class="mono text-xs text-ember-400 uppercase tracking-widest">02 — Stack</span>
+      <span class="mono text-xs text-ember-400 uppercase tracking-widest section-tag">02 — Stack</span>
       <h2 class="text-3xl md:text-4xl font-bold text-white mt-3 display">Technical Skills</h2>
       <p class="text-slate-400 mt-3">The tools I reach for to take a feature from a ticket to a production deploy.</p>
     </div>
-
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-
       <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 card-hover glow-hover">
         <div class="w-11 h-11 rounded-lg bg-ember-400/10 flex items-center justify-center text-ember-400 text-lg mb-5"><i class="fas fa-display"></i></div>
         <h3 class="text-white font-bold mb-3 display">Frontend</h3>
         <p class="text-sm text-slate-400 leading-relaxed">Angular 15+, TypeScript, JavaScript (ES6+), RxJS, Angular Material, Tailwind CSS, Bootstrap, HTML5/CSS3</p>
       </div>
-
       <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 card-hover glow-hover">
         <div class="w-11 h-11 rounded-lg bg-steel-400/10 flex items-center justify-center text-steel-400 text-lg mb-5"><i class="fas fa-server"></i></div>
         <h3 class="text-white font-bold mb-3 display">Backend & API</h3>
         <p class="text-sm text-slate-400 leading-relaxed">ASP.NET Core, RESTful Web API, C#, Entity Framework Core, ADO.NET, LINQ, Dependency Injection, JWT Auth</p>
       </div>
-
       <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 card-hover glow-hover">
         <div class="w-11 h-11 rounded-lg bg-ember-400/10 flex items-center justify-center text-ember-400 text-lg mb-5"><i class="fas fa-database"></i></div>
         <h3 class="text-white font-bold mb-3 display">Databases</h3>
         <p class="text-sm text-slate-400 leading-relaxed">SQL Server, MySQL, PostgreSQL, T-SQL, Stored Procedures, Query Optimization, Indexing, EF Core Migrations</p>
       </div>
-
       <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 card-hover glow-hover">
         <div class="w-11 h-11 rounded-lg bg-steel-400/10 flex items-center justify-center text-steel-400 text-lg mb-5"><i class="fas fa-cloud-arrow-up"></i></div>
         <h3 class="text-white font-bold mb-3 display">Cloud, CI/CD & DevOps</h3>
         <p class="text-sm text-slate-400 leading-relaxed"><span class="text-white font-semibold">AWS</span> (EC2, S3, CodePipeline, CodeBuild, CodeDeploy) — AWS Certified · Git, GitHub Actions, GitFlow, IIS Deployment</p>
       </div>
-
       <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 card-hover glow-hover">
         <div class="w-11 h-11 rounded-lg bg-ember-400/10 flex items-center justify-center text-ember-400 text-lg mb-5"><i class="fas fa-toolbox"></i></div>
         <h3 class="text-white font-bold mb-3 display">Tools</h3>
         <p class="text-sm text-slate-400 leading-relaxed">Visual Studio 2022, VS Code, Postman, Swagger / OpenAPI, npm, NuGet, SSMS</p>
       </div>
-
       <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 card-hover glow-hover">
         <div class="w-11 h-11 rounded-lg bg-steel-400/10 flex items-center justify-center text-steel-400 text-lg mb-5"><i class="fas fa-people-group"></i></div>
         <h3 class="text-white font-bold mb-3 display">Ways of Working</h3>
@@ -246,17 +247,14 @@
   </div>
 </section>
 
-<!-- Experience -->
 <section id="experience" class="py-24 relative z-10 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="max-w-2xl mb-14">
-      <span class="mono text-xs text-ember-400 uppercase tracking-widest">03 — Journey</span>
+      <span class="mono text-xs text-ember-400 uppercase tracking-widest section-tag">03 — Journey</span>
       <h2 class="text-3xl md:text-4xl font-bold text-white mt-3 display">Professional Experience</h2>
     </div>
-
     <div class="space-y-8 relative pl-9 before:absolute before:left-[15px] before:top-2 before:bottom-2 before:w-0.5 before:bg-white/10">
-
-      <div class="relative group bg-[#0d0f13] border border-white/10 hover:border-ember-400/30 rounded-xl p-6 transition-all duration-300">
+      <div class="relative group bg-[#0d0f13] border border-white/10 hover:border-ember-400/30 rounded-xl p-6 transition-all duration-300 card-hover">
         <div class="absolute -left-9 top-6 w-4 h-4 rounded-full bg-ember-400 border-4 border-[#08090c] z-10"></div>
         <div class="flex items-start justify-between gap-3 mb-4 flex-wrap">
           <div>
@@ -273,8 +271,7 @@
           <li class="flex items-start gap-2"><i class="fas fa-check text-ember-400 text-[10px] mt-1.5"></i> Led migration of legacy monoliths to Angular + .NET Core, cutting technical debt and load times.</li>
         </ul>
       </div>
-
-      <div class="relative group bg-[#0d0f13] border border-white/10 hover:border-steel-400/30 rounded-xl p-6 transition-all duration-300">
+      <div class="relative group bg-[#0d0f13] border border-white/10 hover:border-steel-400/30 rounded-xl p-6 transition-all duration-300 card-hover">
         <div class="absolute -left-9 top-6 w-4 h-4 rounded-full bg-slate-600 border-4 border-[#08090c] z-10"></div>
         <div class="flex items-start justify-between gap-3 mb-4 flex-wrap">
           <div>
@@ -295,16 +292,13 @@
   </div>
 </section>
 
-<!-- Projects -->
 <section id="projects" class="py-24 bg-[#0a0c10] border-y border-white/5 relative z-10 px-6">
   <div class="max-w-6xl mx-auto">
     <div class="max-w-2xl mb-14">
-      <span class="mono text-xs text-ember-400 uppercase tracking-widest">04 — Selected Work</span>
+      <span class="mono text-xs text-ember-400 uppercase tracking-widest section-tag">04 — Selected Work</span>
       <h2 class="text-3xl md:text-4xl font-bold text-white mt-3 display">Project Highlights</h2>
     </div>
-
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
       <div class="bg-[#0d0f13] border border-white/10 rounded-xl overflow-hidden card-hover glow-hover flex flex-col">
         <div class="h-28 flex items-center justify-center bg-gradient-to-br from-ember-400/10 to-transparent border-b border-white/10 relative">
           <i class="fas fa-clipboard-check text-3xl text-ember-400/70"></i>
@@ -321,7 +315,6 @@
           <span class="bg-white/5 text-ember-300 text-[10px] px-2 py-0.5 rounded mono">AWS CI/CD</span>
         </div>
       </div>
-
       <div class="bg-[#0d0f13] border border-white/10 rounded-xl overflow-hidden card-hover glow-hover flex flex-col">
         <div class="h-28 flex items-center justify-center bg-gradient-to-br from-steel-400/10 to-transparent border-b border-white/10 relative">
           <i class="fas fa-satellite-dish text-3xl text-steel-400/70"></i>
@@ -337,7 +330,6 @@
           <span class="bg-white/5 text-steel-300 text-[10px] px-2 py-0.5 rounded mono">IoT Pipelines</span>
         </div>
       </div>
-
       <div class="bg-[#0d0f13] border border-white/10 rounded-xl overflow-hidden card-hover glow-hover flex flex-col">
         <div class="h-28 flex items-center justify-center bg-gradient-to-br from-ember-400/10 to-transparent border-b border-white/10 relative">
           <i class="fas fa-plane-departure text-3xl text-ember-400/70"></i>
@@ -358,14 +350,12 @@
   </div>
 </section>
 
-<!-- Education & Details -->
 <section id="education" class="py-24 relative z-10 px-6">
   <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-5 gap-10">
     <div class="lg:col-span-2">
-      <span class="mono text-xs text-ember-400 uppercase tracking-widest">05 — Background</span>
+      <span class="mono text-xs text-ember-400 uppercase tracking-widest section-tag">05 — Background</span>
       <h2 class="text-3xl font-bold text-white mt-3 mb-8 display">Education & Details</h2>
-
-      <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 mb-5">
+      <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 mb-5 card-hover glow-hover">
         <div class="flex items-start gap-4">
           <div class="w-10 h-10 rounded-full bg-ember-400/10 flex items-center justify-center text-ember-400 shrink-0"><i class="fas fa-graduation-cap"></i></div>
           <div>
@@ -375,15 +365,13 @@
           </div>
         </div>
       </div>
-
-      <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10">
+      <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 card-hover glow-hover">
         <h3 class="text-xs uppercase tracking-widest text-slate-500 mono mb-3">Languages</h3>
         <p class="text-sm text-slate-300">English (Professional), Hindi, Urdu</p>
       </div>
     </div>
-
     <div class="lg:col-span-3">
-      <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 mb-5">
+      <div class="bg-[#0d0f13] p-6 rounded-xl border border-white/10 mb-5 card-hover glow-hover">
         <h3 class="text-xs uppercase tracking-widest text-slate-500 mono mb-4">Core Strengths</h3>
         <div class="flex flex-wrap gap-2">
           <span class="bg-ember-400/10 text-ember-300 text-xs px-3 py-1.5 rounded-full border border-ember-400/20">End-to-End Ownership</span>
@@ -396,7 +384,6 @@
           <span class="bg-steel-400/10 text-steel-300 text-xs px-3 py-1.5 rounded-full border border-steel-400/20">Agile Delivery</span>
         </div>
       </div>
-
       <div class="bg-emerald-400/[0.06] border border-emerald-400/25 rounded-xl p-6 flex items-center gap-4">
         <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 status-dot shrink-0"></span>
         <p class="text-sm text-slate-300">Based in Dubai, UAE on a valid Resident Visa · Nationality: Indian · <span class="text-white font-semibold">Available to join immediately.</span></p>
@@ -405,20 +392,19 @@
   </div>
 </section>
 
-<!-- Contact -->
 <section id="contact" class="py-24 relative z-10 px-6">
   <div class="max-w-3xl mx-auto text-center">
-    <span class="mono text-xs text-ember-400 uppercase tracking-widest">06 — Contact</span>
+    <span class="mono text-xs text-ember-400 uppercase tracking-widest section-tag">06 — Contact</span>
     <h2 class="text-3xl md:text-4xl font-bold text-white mt-3 mb-4 display">Let's build something reliable.</h2>
     <p class="text-slate-400 max-w-xl mx-auto mb-10">Open to Full Stack / .NET / Angular roles across the UAE — available to start immediately.</p>
     <div class="flex flex-wrap justify-center gap-4 mono text-sm">
-      <a href="mailto:himayatb3@gmail.com" class="bg-[#0d0f13] border border-white/10 hover:border-ember-400/40 px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
+      <a href="mailto:himayatb3@gmail.com" class="btn-magnetic bg-[#0d0f13] border border-white/10 hover:border-ember-400/40 px-6 py-3 rounded-lg flex items-center gap-2">
         <i class="fas fa-envelope text-ember-400"></i> himayatb3@gmail.com
       </a>
-      <a href="tel:+971561452089" class="bg-[#0d0f13] border border-white/10 hover:border-ember-400/40 px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
+      <a href="tel:+971561452089" class="btn-magnetic bg-[#0d0f13] border border-white/10 hover:border-ember-400/40 px-6 py-3 rounded-lg flex items-center gap-2">
         <i class="fas fa-phone text-ember-400"></i> +971-56-1452089
       </a>
-      <a href="https://www.linkedin.com/in/himayat-bhat" target="_blank" class="bg-[#0d0f13] border border-white/10 hover:border-ember-400/40 px-6 py-3 rounded-lg transition-colors flex items-center gap-2">
+      <a href="https://www.linkedin.com/in/himayat-bhat" target="_blank" class="btn-magnetic bg-[#0d0f13] border border-white/10 hover:border-ember-400/40 px-6 py-3 rounded-lg flex items-center gap-2">
         <i class="fab fa-linkedin text-ember-400"></i> LinkedIn
       </a>
     </div>
@@ -431,7 +417,6 @@
   </div>
 </footer>
 
-<!-- Floating contact widgets -->
 <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-center">
   <a href="mailto:himayatb3@gmail.com" class="bg-[#ea4335] hover:bg-[#c5221f] text-white p-3 rounded-full shadow-lg hover:shadow-2xl hover:scale-110 transition-all duration-300 flex items-center justify-center" aria-label="Email">
     <i class="fas fa-envelope text-lg"></i>
@@ -445,7 +430,6 @@
 </div>
 
 <script>
-  // Nav scrollspy
   const navLinks = document.querySelectorAll('[data-nav]');
   const sections = Array.from(navLinks).map(l => document.querySelector(l.getAttribute('href')));
   function setActive(link){ navLinks.forEach(l=>l.classList.remove('active')); link.classList.add('active'); }
@@ -461,7 +445,6 @@
   }, { rootMargin:'-45% 0px -50% 0px', threshold:0 });
   sections.forEach(s => { if(s) spy.observe(s); });
 
-  // Typing effect
   const typedLine = document.getElementById('typedLine');
   const messages = ['Deployed to production', 'Alert pipeline nominal', 'Zero-downtime release complete', 'Sensor sync healthy'];
   let mi = 0;
@@ -477,13 +460,30 @@
   function cycle(){ typeMessage(messages[mi], ()=>{ mi=(mi+1)%messages.length; cycle(); }); }
   cycle();
 
-  // Reveal on scroll (subtle)
   const revealEls = document.querySelectorAll('section');
   revealEls.forEach(s => s.classList.add('reveal'));
   const revealObs = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); revealObs.unobserve(e.target); } });
   }, { threshold: 0.08 });
   revealEls.forEach(s => revealObs.observe(s));
+
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    document.getElementById('scrollProgress').style.width = scrolled + '%';
+  });
+
+  const heroPanel = document.getElementById('heroPanel');
+  const cursorGlow = document.getElementById('cursorGlow');
+  if(heroPanel && cursorGlow){
+    heroPanel.addEventListener('mousemove', (e)=>{
+      const rect = heroPanel.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      cursorGlow.style.setProperty('--x', x + '%');
+      cursorGlow.style.setProperty('--y', y + '%');
+    });
+  }
 </script>
 
 </body>
