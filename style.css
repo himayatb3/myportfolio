@@ -516,10 +516,10 @@ html.playing .game { display: block; }
 }
 
 /* Start screen */
-.start { position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; padding: 20px; overflow: auto; background: radial-gradient(ellipse at 50% 40%, hsl(var(--hue) 50% 10% / .6), hsl(var(--hue) 60% 4% / .92)); }
+.start-screen { position: absolute; inset: 0; z-index: 6; display: grid; place-items: center; padding: 20px; overflow: auto; background: radial-gradient(ellipse at 50% 40%, hsl(var(--hue) 50% 10% / .6), hsl(var(--hue) 60% 4% / .92)); }
 .start-card { max-width: 580px; text-align: center; }
 .badge.big { width: 68px; height: 58px; font-size: 32px; margin: 0 auto 20px; }
-.start h2 { font-size: clamp(42px, 7vw, 76px); line-height: 1; letter-spacing: -.03em; }
+.start-screen h2 { font-size: clamp(42px, 7vw, 76px); line-height: 1; letter-spacing: -.03em; }
 .start-role { margin-top: 12px; font: 600 18px var(--display); color: var(--xp); }
 .start-copy { margin: 18px auto 0; max-width: 46ch; }
 .start-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 28px; }
