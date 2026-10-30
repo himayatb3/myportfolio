@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Silkscreen:wght@400;700&display=swap">
 <link rel="stylesheet" href="style.css">
-<script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__motion)document.documentElement.classList.remove('js')},2500)</script>
+<script>(function(){var d=document.documentElement;d.classList.add('js');var v=null;try{v=sessionStorage.getItem('view')}catch(e){}if(v!=='classic')d.classList.add('playing');setTimeout(function(){if(!window.__motion)d.classList.remove('js');if(!window.__game)d.classList.remove('playing')},2500)})()</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -64,7 +64,7 @@
       <p>Systems that carry a request, an incident, or a delivery all the way through.<br><span class="muted">Selected professional work, 2024–2026</span></p>
     </div>
 
-    <article class="featured panel c-hp" data-spawn>
+    <article class="featured panel c-hp" data-spawn data-panel="hse">
       <div class="project-story">
         <div class="card-top"><span class="quest-tag">Main quest</span><span class="domain">Health &amp; Safety</span><span class="org">NAFFCO</span></div>
         <h3>Accountability.<br>At every step.</h3>
@@ -85,28 +85,28 @@
     </article>
 
     <div class="project-grid">
-      <article class="project-card panel c-mp" data-spawn>
+      <article class="project-card panel c-mp" data-spawn data-panel="eng">
         <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Engineering</span><span class="org">NAFFCO</span></div>
         <h3>Requests with<br>a clear next step.</h3>
         <p>ESL, DCD, Shop Drawing Requests, and project attendance. From reference generation and document uploads to engineer assignment and role-based tracking.</p>
         <div class="tags"><span>Angular</span><span>Dapper</span><span>TVPs / T-SQL</span></div>
         <details><summary>Engineering workflows <span>+</span></summary><div class="detail-body">Designed reference-number generation, transactional writes, engineer assignment, document handling, and permission-aware request lists.</div></details>
       </article>
-      <article class="project-card panel c-heal" data-spawn>
+      <article class="project-card panel c-heal" data-spawn data-panel="delivery">
         <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Delivery operations</span><span class="org">NAFFCO</span></div>
         <h3>From dispatch<br>to proof of delivery.</h3>
         <p>ERP-linked delivery-note lookup, driver assignment, delivery status, e-signatures, and attachment handling in one operational workflow.</p>
         <div class="tags"><span>ASP.NET Core</span><span>ERP integration</span><span>SQL Server</span></div>
         <details><summary>Delivery management <span>+</span></summary><div class="detail-body">Stored driver details alongside delivery records, enforced proof-of-delivery attachments, and added status, driver, and date filters. Connected delivery data through read-only ERP queries.</div></details>
       </article>
-      <article class="project-card panel c-xp" data-spawn>
+      <article class="project-card panel c-xp" data-spawn data-panel="notify">
         <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Shared infrastructure</span><span class="org">eConnect</span></div>
         <h3>The right update.<br>The right destination.</h3>
         <p>A central notification service with user targeting, Firebase push delivery, per-application unread counts, and mobile/web deep links.</p>
         <div class="tags"><span>Firebase FCM</span><span>ASP.NET Core</span><span>SQL Server</span></div>
         <details><summary>Notification infrastructure <span>+</span></summary><div class="detail-body">Built database-backed notification records, device-token integration, read-state tracking, pagination, and application-aware routing across enterprise modules.</div></details>
       </article>
-      <article class="project-card panel c-arcane" data-spawn>
+      <article class="project-card panel c-arcane" data-spawn data-panel="realtime">
         <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Real-time systems</span><span class="org">NAFFCO</span></div>
         <h3>Signals become<br>actionable information.</h3>
         <p>AIGorizm safety monitoring: real-time fire-alarm and sensor-data ingestion, alarm classification, and SignalR updates.</p>
@@ -115,7 +115,7 @@
       </article>
     </div>
 
-    <div class="additional-project" data-spawn>
+    <div class="additional-project" data-spawn data-panel="logic">
       <div><span class="quest-tag dim">Earlier quest</span><span class="domain">Logic Hub</span></div>
       <h3>Tour &amp; Travel +<br>Online Services</h3>
       <p>End-to-end booking systems covering discovery, scheduling, payment, confirmation, and fulfillment. Layered ASP.NET Core services, responsive Angular interfaces, MySQL, and PostgreSQL.</p>
@@ -136,11 +136,11 @@
     <p>From a responsive interface to the query underneath it. I work across the layers that make a feature useful.</p>
   </div>
   <div class="tree" data-tree>
-    <div class="skill-row c-mp" data-spawn><span class="gem" aria-hidden="true"></span><h3>Backend &amp; APIs</h3><div><p>C# · ASP.NET Core 8/9 · REST APIs · EF Core · Dapper · ADO.NET · LINQ · Mapster</p><small>Layered services, JWT authentication, role-based access, validation, exception handling, Serilog, IMemoryCache, and QuestPDF.</small></div></div>
-    <div class="skill-row c-heal" data-spawn><span class="gem" aria-hidden="true"></span><h3>Frontend</h3><div><p>Angular · TypeScript · RxJS · HTML &amp; CSS · PrimeNG · AG Grid</p><small>Responsive interfaces, route guards, lazy loading, forms, ECharts dashboards, Leaflet maps, and Bootstrap.</small></div></div>
-    <div class="skill-row c-xp" data-spawn><span class="gem" aria-hidden="true"></span><h3>Data &amp; performance</h3><div><p>SQL Server · T-SQL · MySQL · PostgreSQL</p><small>Stored procedures, transactions, CTEs, table-valued parameters, normalization, indexing, execution plans, and server-side pagination.</small></div></div>
-    <div class="skill-row c-arcane" data-spawn><span class="gem" aria-hidden="true"></span><h3>Integration &amp; delivery</h3><div><p>SignalR · Firebase Cloud Messaging · Git · IIS · Postman · Swagger</p><small>Real-time updates, ERP integration, deep links, PDF generation, file uploads, production troubleshooting, and Windows/Linux deployment.</small></div></div>
-    <div class="skill-row c-hp in-progress" data-spawn><span class="gem" aria-hidden="true"></span><h3>Cloud &amp; growing skills <span class="state">In progress</span></h3><div><p>AWS knowledge · EC2 · S3 · Lambda · CI/CD concepts</p><small>Developing knowledge of GitHub Actions, CodePipeline, CodeBuild, and CodeDeploy. Exploring Kafka, RAG/Ollama, and domain-driven design.</small></div></div>
+    <div class="skill-row c-mp" data-spawn data-panel="skill-backend"><span class="gem" aria-hidden="true"></span><h3>Backend &amp; APIs</h3><div><p>C# · ASP.NET Core 8/9 · REST APIs · EF Core · Dapper · ADO.NET · LINQ · Mapster</p><small>Layered services, JWT authentication, role-based access, validation, exception handling, Serilog, IMemoryCache, and QuestPDF.</small></div></div>
+    <div class="skill-row c-heal" data-spawn data-panel="skill-frontend"><span class="gem" aria-hidden="true"></span><h3>Frontend</h3><div><p>Angular · TypeScript · RxJS · HTML &amp; CSS · PrimeNG · AG Grid</p><small>Responsive interfaces, route guards, lazy loading, forms, ECharts dashboards, Leaflet maps, and Bootstrap.</small></div></div>
+    <div class="skill-row c-xp" data-spawn data-panel="skill-data"><span class="gem" aria-hidden="true"></span><h3>Data &amp; performance</h3><div><p>SQL Server · T-SQL · MySQL · PostgreSQL</p><small>Stored procedures, transactions, CTEs, table-valued parameters, normalization, indexing, execution plans, and server-side pagination.</small></div></div>
+    <div class="skill-row c-arcane" data-spawn data-panel="skill-integration"><span class="gem" aria-hidden="true"></span><h3>Integration &amp; delivery</h3><div><p>SignalR · Firebase Cloud Messaging · Git · IIS · Postman · Swagger</p><small>Real-time updates, ERP integration, deep links, PDF generation, file uploads, production troubleshooting, and Windows/Linux deployment.</small></div></div>
+    <div class="skill-row c-hp in-progress" data-spawn data-panel="skill-cloud"><span class="gem" aria-hidden="true"></span><h3>Cloud &amp; growing skills <span class="state">In progress</span></h3><div><p>AWS knowledge · EC2 · S3 · Lambda · CI/CD concepts</p><small>Developing knowledge of GitHub Actions, CodePipeline, CodeBuild, and CodeDeploy. Exploring Kafka, RAG/Ollama, and domain-driven design.</small></div></div>
   </div>
 </section>
 
@@ -153,14 +153,14 @@
       <div class="experience-total"><strong>2+</strong><span>years building<br>production software</span></div>
     </div>
     <div class="jobs" data-trail>
-      <article class="job" data-spawn><div class="job-date">Sep 2025 — Present <span>Dubai, UAE</span></div><h3>NAFFCO FZCO</h3><p class="role">Software Developer</p><ul><li>Delivered 88+ APIs and enterprise workflows spanning HSE, EMS, HR self-service, notifications, and delivery.</li><li>Owned Incident and Observation Management through multi-level approvals, corrective actions, escalation, signatures, and reporting.</li><li>Built ESL, DCD, Shop Drawing Requests, Shop Drawing Attendance, Chemical Logs, and Item Delivery workflows.</li><li>Designed and tuned SQL Server data access and supported production issues across backend and frontend layers.</li></ul></article>
-      <article class="job" data-spawn><div class="job-date">Apr 2024 — Jun 2025 <span>Srinagar, India</span></div><h3>Logic Hub Software Solutions</h3><p class="role">Software Developer</p><ul><li>Built Tour &amp; Travel and Online Services booking systems from initial requirements to complete application flows.</li><li>Implemented Controller–Service–Repository backends with ASP.NET Core and EF Core.</li><li>Created responsive Angular interfaces, route guards, lazy loading, database schemas, and authentication flows.</li></ul></article>
-      <div class="education" data-spawn><div><span class="label">Education</span><h4>B.Voc — Management</h4><p>Central University of Kashmir · 2022</p></div><div><span class="label">Languages</span><p>English · Hindi · Urdu</p></div></div>
+      <article class="job" data-spawn data-panel="job-naffco"><div class="job-date">Sep 2025 — Present <span>Dubai, UAE</span></div><h3>NAFFCO FZCO</h3><p class="role">Software Developer</p><ul><li>Delivered 88+ APIs and enterprise workflows spanning HSE, EMS, HR self-service, notifications, and delivery.</li><li>Owned Incident and Observation Management through multi-level approvals, corrective actions, escalation, signatures, and reporting.</li><li>Built ESL, DCD, Shop Drawing Requests, Shop Drawing Attendance, Chemical Logs, and Item Delivery workflows.</li><li>Designed and tuned SQL Server data access and supported production issues across backend and frontend layers.</li></ul></article>
+      <article class="job" data-spawn data-panel="job-logic"><div class="job-date">Apr 2024 — Jun 2025 <span>Srinagar, India</span></div><h3>Logic Hub Software Solutions</h3><p class="role">Software Developer</p><ul><li>Built Tour &amp; Travel and Online Services booking systems from initial requirements to complete application flows.</li><li>Implemented Controller–Service–Repository backends with ASP.NET Core and EF Core.</li><li>Created responsive Angular interfaces, route guards, lazy loading, database schemas, and authentication flows.</li></ul></article>
+      <div class="education" data-spawn data-panel="education"><div><span class="label">Education</span><h4>B.Voc — Management</h4><p>Central University of Kashmir · 2022</p></div><div><span class="label">Languages</span><p>English · Hindi · Urdu</p></div></div>
     </div>
   </div>
 </section>
 
-<section class="stage contact wrap" id="contact" data-level="5" data-name="Final stage" data-hue="228">
+<section class="stage contact wrap" id="contact" data-panel="contact" data-level="5" data-name="Final stage" data-hue="228">
   <div class="contact-top"><span class="level-plate">Level 05</span><span>Open to Full Stack / .NET / Angular roles</span></div>
   <h2 data-spawn>Good software<br>starts with a <a href="mailto:himayatb3@gmail.com">conversation.<span aria-hidden="true">↗</span></a></h2>
   <div class="contact-links"><a href="mailto:himayatb3@gmail.com">himayatb3@gmail.com</a><a href="tel:+971561452089">+971 56 145 2089</a><a href="https://ae.linkedin.com/in/mohammad-himayat-ullah-bhat-910b18229" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></div>
@@ -168,6 +168,51 @@
 </main>
 
 <footer class="wrap"><a class="wordmark" href="#top" aria-label="Back to top"><span class="badge">hb</span></a><span>© 2026 Mohammad Himayat Ullah Bhat</span><a href="#top">Back to top ↑</a></footer>
+
+<div id="game" class="game" tabindex="-1">
+  <canvas id="world" role="img" aria-label="Interactive portfolio game. Use the Classic view button for a regular page."></canvas>
+  <header class="ghud">
+    <div class="ghud-id"><span class="badge">hb</span><div class="lv"><b data-g-level>LV 01</b><i data-g-zone>Title screen</i></div></div>
+    <div class="ghud-stats">
+      <span class="stat" title="Tech stack collected"><i class="i-coin"></i><b data-g-coins>0/10</b><em>Stack</em></span>
+      <span class="stat" title="Bugs squashed"><i class="i-bug"></i><b data-g-bugs>0</b><em>Bugs</em></span>
+      <span class="stat explored" title="Doors, blocks and flags opened"><b data-g-explored>0/15</b><em>Explored</em><span class="meter"><i data-g-bar></i></span></span>
+    </div>
+    <div class="ghud-actions">
+      <button type="button" data-g-sound aria-pressed="true">Sound on</button>
+      <button type="button" data-g-classic>Classic view</button>
+      <button type="button" class="primary" data-g-talk>Let’s talk <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
+  <div class="g-hint" data-g-hint><span><kbd>←</kbd><kbd>→</kbd> move</span><span><kbd>Space</kbd> jump</span><span><kbd>E</kbd> open</span><span><kbd>M</kbd> sound</span></div>
+  <div class="zone-banner" data-g-banner aria-hidden="true"></div>
+  <div class="sr-only" aria-live="polite" data-g-live></div>
+  <div class="touch" aria-hidden="true">
+    <div class="dpad"><button type="button" data-t="left">◀</button><button type="button" data-t="right">▶</button></div>
+    <div class="abtns"><button type="button" data-t="act">E</button><button type="button" data-t="jump">▲</button></div>
+  </div>
+  <section id="start" class="start" aria-labelledby="start-title" hidden>
+    <div class="start-card">
+      <span class="badge big">hb</span>
+      <h2 id="start-title">Himayat Bhat</h2>
+      <p class="start-role">Full Stack Developer in Dubai</p>
+      <p class="start-copy">My portfolio is a game. Run, jump, collect my tech stack, stomp a few bugs, and open the doors to see what I’ve built. Every project has something to try.</p>
+      <div class="start-actions">
+        <button type="button" class="btn-start" data-start="play">Press start</button>
+        <button type="button" class="btn-alt" data-start="classic">Classic view</button>
+      </div>
+      <p class="start-keys"><kbd>←</kbd><kbd>→</kbd> or <kbd>A</kbd><kbd>D</kbd> to move, <kbd>Space</kbd> to jump, <kbd>E</kbd> to open. On a phone, use the buttons.</p>
+    </div>
+  </section>
+</div>
+
+<dialog id="panel" class="panel-dialog" aria-labelledby="panel-title">
+  <div class="panel-head"><h2 id="panel-title"></h2><button type="button" class="panel-close" aria-label="Close">✕</button></div>
+  <div class="panel-body"></div>
+</dialog>
+<button type="button" class="play-fab" id="play-fab" hidden>▶ Play the game</button>
+<script src="minigames.js"></script>
+<script src="game.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
