@@ -2,7 +2,7 @@
 
 # Play mode
 
-The site now opens on a start screen: **Press start** drops you into a side-scrolling world, **Classic view** is the normal scrolling page (also the fallback without JavaScript and for reduced motion preferences). The choice is remembered for the tab.
+The site now opens on a start screen: **Press start** drops you into a side-scrolling world, **Classic view** is the normal scrolling page (also the fallback when JavaScript is unavailable). The choice is remembered for the tab.
 
 **Controls:** arrows / A D to move, Space / W / Up to jump, E / Enter to interact, M to mute. On touch devices an on-screen pad appears.
 
