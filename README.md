@@ -1,5 +1,16 @@
 # Himayat Portfolio
 
+# Play mode
+
+The site now opens on a start screen: **Press start** drops you into a side-scrolling world, **Classic view** is the normal scrolling page (also the fallback without JavaScript and for reduced motion preferences). The choice is remembered for the tab.
+
+**Controls:** arrows / A D to move, Space / W / Up to jump, E / Enter to interact, M to mute. On touch devices an on-screen pad appears.
+
+**What to do:** collect the 10 tech coins, stomp bugs (they only knock you back, there is no game over), walk to doors, flags and the gate and press E, and bump the skill blocks from below. Every project door opens a panel with a short mini-game (workflow order, role visibility, signature pad, notification inbox, alarm classification, booking stages). Contact details are never gated: "Let's talk" is always in the HUD.
+
+**Files:** `game.js` (world, physics, HUD, panels), `minigames.js` (the mini-games), `script.js` (classic scroll view, paused while playing). Panel text is cloned from the classic page via `data-panel` attributes, so content lives in one place.
+
+
 A portfolio that plays like a game. Scrolling moves a pixel character along an XP bar, every section is a level, and the page rewards you with achievements as you read.
 
 ## Run

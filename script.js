@@ -286,6 +286,7 @@
   let first = true;
 
   function frame(t) {
+    if (root.classList.contains('playing')) { lastY = window.scrollY; requestAnimationFrame(frame); return; }
     const y = window.scrollY;
     const delta = y - lastY;
 
@@ -335,6 +336,8 @@
     resizeTimer = setTimeout(() => { sizeCanvases(); measure(); first = true; }, 120);
   });
   window.addEventListener('load', () => { measure(); first = true; });
+  // Coming back from Play mode: re-measure once the page is on screen again
+  window.addEventListener('portfolio:view', () => requestAnimationFrame(() => { measure(); first = true; sizeCanvases(); }));
   if ('ResizeObserver' in window) new ResizeObserver(() => { measure(); }).observe(document.body);
 
   /* ==========================================================
