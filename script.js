@@ -132,6 +132,18 @@
   const hudNum = hudChapter.querySelector('.hud-num');
   const hudName = hudChapter.querySelector('.hud-name');
   const cue = document.querySelector('.cue');
+  const floor = document.querySelector('.floor');
+
+  // Mouse parallax: the whole stage leans gently toward the pointer (mouse devices only)
+  const tilt = { x: 0, y: 0 };
+  const tiltTarget = { x: 0, y: 0 };
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    window.addEventListener('pointermove', e => {
+      tiltTarget.x = (e.clientY / window.innerHeight - 0.5) * -5;
+      tiltTarget.y = (e.clientX / window.innerWidth - 0.5) * 7;
+    }, { passive: true });
+    document.addEventListener('pointerleave', () => { tiltTarget.x = 0; tiltTarget.y = 0; });
+  }
   let active = -1;
   let smooth = Math.max(0, window.scrollY - trackTop);
   let lastSmooth = -1;
@@ -154,13 +166,16 @@
         s.vis = visible;
       }
       if (!visible && s.op === 0) return;
+      // 3D travel: a new scene rises out of the distance, the old one flies past the camera
+      const out = 1 - exit;
+      const into = 1 - enter;
+      let ty, tz, rx;
+      if (out > 0) { const e = easeOut(out); ty = -50 * e; tz = 360 * e; rx = -10 * e; }
+      else { const e = into * into; ty = 90 * e; tz = -520 * e; rx = 16 * e; }
+      const transform = `perspective(1400px) translate3d(0,${ty.toFixed(1)}px,${tz.toFixed(1)}px) rotateX(${(rx + tilt.x).toFixed(2)}deg) rotateY(${tilt.y.toFixed(2)}deg)`;
+      if (transform !== s.tf) { s.el.style.transform = transform; s.tf = transform; }
       if (Math.abs(op - s.op) > 0.001 || op === 0 || op === 1) {
-        const out = 1 - exit;
-        const into = 1 - enter;
-        const ty = out > 0 ? -60 * easeOut(out) : 60 * into;
-        const sc = out > 0 ? 1 - 0.04 * out : 1;
         s.el.style.opacity = op.toFixed(3);
-        s.el.style.transform = `translate3d(0,${ty.toFixed(1)}px,0) scale(${sc.toFixed(4)})`;
         s.op = op;
       }
 
@@ -205,6 +220,10 @@
     timelineFill.style.setProperty('--progress', clamp(y / total).toFixed(4));
     ticks.forEach((t, i) => t.classList.toggle('passed', y >= scenes[i].start - 1));
     root.style.setProperty('--bars', (1 - clamp((y / vh - 0.25) / 0.9)).toFixed(3));
+    if (floor) {
+      floor.style.setProperty('--gy', ((y * 0.35) % 90).toFixed(1) + 'px');
+      floor.style.setProperty('--fz', (tilt.y * -0.6).toFixed(2) + 'deg');
+    }
     cue.classList.toggle('gone', y > 30);
   }
 
@@ -230,11 +249,22 @@
   }
 
   // Smoothly follow the real scroll position so scrubbed text glides instead of stepping
-  function frame() {
+  let lastTime = performance.now();
+  function frame(now) {
+    // Time-based easing: same feel at 30, 60 or 120 frames per second
+    const dt = Math.min((now || performance.now()) - lastTime, 100);
+    lastTime = now || performance.now();
+    const k = 1 - Math.exp(-dt / 110);
     const target = Math.min(Math.max(window.scrollY - trackTop, 0), total);
-    smooth += (target - smooth) * 0.14;
+    smooth += (target - smooth) * k;
     if (Math.abs(target - smooth) < 0.3) smooth = target;
-    if (smooth !== lastSmooth) {
+
+    // Ease the stage tilt toward the pointer
+    const dx = tiltTarget.x - tilt.x, dy = tiltTarget.y - tilt.y;
+    const tilting = Math.abs(dx) > 0.01 || Math.abs(dy) > 0.01;
+    if (tilting) { const kt = 1 - Math.exp(-dt / 200); tilt.x += dx * kt; tilt.y += dy * kt; }
+
+    if (smooth !== lastSmooth || tilting) {
       render(smooth);
       lastSmooth = smooth;
     }
