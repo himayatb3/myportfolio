@@ -330,3 +330,121 @@ html:not(.js) .resume-inner{max-width:900px;margin:auto;padding-top:80px;padding
   .modules li{padding:13px 18px}
   .flow{margin-top:40px}
 }
+
+/* ==========================================================
+   3D LAYER
+   ========================================================== */
+:root{--tone:213,250,82}
+body[data-tone=blue]{--tone:91,116,255}
+body[data-tone=amber]{--tone:255,138,76}
+
+/* A grid floor that rushes toward you as you scroll: the journey moving forward */
+.floor{display:none}
+.js .floor{display:block;position:fixed;left:0;right:0;bottom:0;height:46vh;z-index:1;pointer-events:none;perspective:520px;perspective-origin:50% 0;overflow:hidden;-webkit-mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.55) 45%,transparent 100%);mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,.55) 45%,transparent 100%)}
+.floor-plane{position:absolute;left:-60%;right:-60%;top:0;height:260%;transform-origin:50% 0;transform:rotateX(72deg) rotateZ(var(--fz,0deg));background-image:linear-gradient(rgba(var(--tone),.34) 1px,transparent 1px),linear-gradient(90deg,rgba(var(--tone),.34) 1px,transparent 1px);background-size:90px 90px;background-position:center var(--gy,0px);transition:background-image 1.2s}
+.floor::after{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,rgba(var(--tone),.7),transparent);box-shadow:0 0 40px 6px rgba(var(--tone),.35)}
+
+/* Scenes travel through depth (transform is set by script) */
+.js .scene{transform-origin:50% 60%;backface-visibility:hidden}
+
+/* Shared: extruded, turning type */
+.turn{perspective:1000px}
+.turn>*{transform-style:preserve-3d}
+.js .turn .mega.on,.js .turn .big{transform:rotateY(calc((var(--f,0) - .5) * -38deg)) rotateX(8deg)}
+.mega em{text-shadow:1px 1px 0 #e0733b,2px 2px 0 #d26a35,3px 3px 0 #c4622f,4px 4px 0 #b65a2a,5px 5px 0 #a85225,6px 6px 0 #9a4a20,7px 7px 0 #8c431c,8px 8px 0 #7e3b18,9px 9px 0 #6f3414,10px 10px 0 #612d11,14px 22px 40px rgba(0,0,0,.6)}
+.big{text-shadow:1px 1px 0 #c3e346,2px 2px 0 #b6d540,3px 3px 0 #a9c63a,4px 4px 0 #9cb835,5px 5px 0 #8fa92f,6px 6px 0 #829b2a,7px 7px 0 #758c25,8px 8px 0 #687e20,9px 9px 0 #5b701b,10px 10px 0 #4e6116,11px 11px 0 #425312,16px 26px 50px rgba(0,0,0,.65),0 0 90px rgba(213,250,82,.2)}
+
+/* II — the booking track lies on a tilted plane */
+.flow{transform:perspective(900px) rotateX(32deg);transform-style:preserve-3d}
+.flow li span{transition:background .6s var(--ease),color .6s,border-color .6s,box-shadow .6s,transform .7s var(--ease)}
+.flow li.on span{transform:translateY(-8px);box-shadow:0 0 0 8px rgba(91,116,255,.14),0 18px 24px -8px rgba(91,116,255,.6)}
+
+/* IV — workflow cards swing in like doors */
+.workflow{perspective:1100px}
+.js .workflow li[data-in]{transform:rotateY(-58deg) translateX(70px);transform-origin:0 50%}
+.js .workflow li[data-in].on{transform:rotateY(-9deg)}
+.js .workflow li[data-in].on:hover{transform:rotateY(0)}
+.workflow li{box-shadow:24px 24px 50px -24px rgba(0,0,0,.8)}
+
+/* V — modules rise like a city from a tilted map, then settle */
+.city{perspective:1300px;width:100%;max-width:980px;display:flex;justify-content:center}
+.modules{transform-style:preserve-3d;transform:rotateX(calc(52deg - var(--f,0) * 36deg)) rotateZ(calc(-14deg + var(--f,0) * 14deg));transform-origin:50% 60%}
+.js .modules li[data-in]{transform:translateZ(0) translateY(40px)}
+.js .modules li[data-in].on{transform:translateZ(26px);border-color:rgba(213,250,82,.28);box-shadow:0 30px 30px -18px rgba(0,0,0,.9),0 0 0 1px rgba(213,250,82,.06),inset 0 1px 0 rgba(255,255,255,.05)}
+.modules li{transition:opacity .9s var(--ease),transform 1.1s var(--ease),filter .9s var(--ease),border-color .6s,box-shadow .6s}
+
+/* VII — design documents fanned out in space */
+.docs{position:relative;height:420px;perspective:1300px;transform-style:preserve-3d}
+.page{position:absolute;top:10px;left:calc(50% - 150px);width:300px;height:380px;padding:22px 22px 0;border-radius:10px;background:linear-gradient(160deg,#f7f8f2,#e3e6db);color:#171916;overflow:hidden;box-shadow:0 40px 60px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.06);transform-origin:50% 100%;--pt:translateX(calc((var(--k) - 1) * var(--f,0) * 150px)) translateZ(calc(var(--k) * 50px - 100px)) rotateY(calc(-34deg + var(--f,0) * 20deg)) rotateZ(calc((var(--k) - 1) * var(--f,0) * 4deg))}
+.js .docs .page[data-in]{transform:var(--pt) translateY(120px) rotateX(-30deg)}
+.js .docs .page[data-in].on{transform:var(--pt)}
+.page header{display:flex;justify-content:space-between;font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#5a7406;padding-bottom:12px;border-bottom:1px solid #cdd1c4}
+.page h3{font-size:24px;line-height:1.1;letter-spacing:-.04em;font-weight:600;margin-top:18px}
+.page p{font-size:13px;color:#545a4e;margin-top:8px;line-height:1.5}
+.page .lines{display:block;height:160px;margin-top:18px;background:repeating-linear-gradient(#171916 0 2px,transparent 2px 16px);opacity:.12;-webkit-mask-image:linear-gradient(90deg,#000 70%,transparent);mask-image:linear-gradient(90deg,#000 70%,transparent)}
+.page[style*="--k:2"] .lines{background:linear-gradient(#5b74ff,#5b74ff) 0 6px/36px 22px no-repeat,linear-gradient(#5b74ff,#5b74ff) 70px 6px/36px 22px no-repeat,linear-gradient(#5b74ff,#5b74ff) 140px 6px/36px 22px no-repeat,linear-gradient(#171916,#171916) 36px 16px/34px 2px no-repeat,linear-gradient(#171916,#171916) 106px 16px/34px 2px no-repeat,repeating-linear-gradient(transparent 0 50px,#171916 50px 52px,transparent 52px 66px);opacity:.35}
+
+/* VIII — near miss route across a curved 3D panel */
+.route{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;width:100%;max-width:1040px;margin-top:70px;perspective:1100px;transform-style:preserve-3d}
+.route-track{position:absolute;left:8%;right:8%;top:-30px;height:2px;background:var(--line)}
+.route-track::before{content:'';position:absolute;inset:0;background:var(--amber);transform-origin:left;transform:scaleX(var(--f,0));box-shadow:0 0 14px var(--amber)}
+.route-dot{position:absolute;top:50%;left:calc(var(--f,0) * 100%);width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 6px rgba(255,138,76,.18),0 0 24px var(--amber)}
+.node{text-align:left;padding:24px 24px 26px;border-radius:14px;border:1px solid #4a3a30;background:linear-gradient(160deg,rgba(255,138,76,.12),rgba(20,22,18,.75));box-shadow:0 40px 60px -30px rgba(0,0,0,.9)}
+.node span{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--amber);font-weight:600}
+.node b{display:block;font-size:clamp(18px,1.6vw,23px);letter-spacing:-.025em;font-weight:600;margin-top:12px;line-height:1.2}
+.node small{display:block;font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5}
+.js .route .node[data-in]{transform:rotateY(calc(var(--r) * 24deg)) translateZ(-220px) translateY(40px)}
+.js .route .node[data-in].on{transform:rotateY(calc(var(--r) * 18deg)) translateZ(calc((1 - var(--r) * var(--r)) * 50px))}
+.live.amber{color:var(--amber);border-color:#5b3a28;background:rgba(255,138,76,.06)}
+.live.amber i{background:var(--amber);animation-name:pulseAmber}
+@keyframes pulseAmber{70%{box-shadow:0 0 0 10px rgba(255,138,76,0)}100%{box-shadow:0 0 0 0 rgba(255,138,76,0)}}
+
+/* IX — the stack as an exploded isometric diagram */
+.layers{display:block;perspective:1600px;height:440px;position:relative;gap:0}
+.layers-inner{position:absolute;inset:0;display:grid;place-items:center;transform-style:preserve-3d;transform:rotateX(56deg) rotateZ(-34deg);--gap:calc(26px + var(--f,0) * 62px)}
+.layers .layer{grid-area:1/1;width:min(420px,100%);min-height:118px;justify-content:flex-end;padding:20px 24px;box-shadow:0 0 0 1px rgba(91,116,255,.08),18px 18px 0 -2px rgba(12,13,11,.55);background:linear-gradient(135deg,rgba(40,52,120,.92),rgba(18,22,44,.92))}
+.layers .layer.next{background:rgba(12,13,11,.6)}
+.js .layers .layer[data-in]{transform:translateZ(calc(var(--i) * var(--gap) + 260px))}
+.js .layers .layer[data-in].on{transform:translateZ(calc(var(--i) * var(--gap)))}
+.layers .layer b{font-size:clamp(15px,1.3vw,18px)}
+
+/* X — the name flips up word by word */
+.name{perspective:900px}
+.js .name span[data-in]{transform:rotateX(-95deg) translateY(30px);transform-origin:50% 100%}
+.js .name span[data-in].on{transform:none}
+.js .name .hl[data-in]{transform:rotateX(-95deg) rotate(-1.5deg)}
+.js .name .hl[data-in].on{transform:rotate(-1.5deg)}
+.name .hl{box-shadow:4px 4px 0 #a9c63a,8px 8px 0 #7e9a24,12px 12px 0 #546a14,18px 26px 40px rgba(0,0,0,.6)}
+
+@media (max-width:900px){
+  .docs{height:330px}
+  .page{width:220px;height:290px;left:calc(50% - 110px);padding:16px 16px 0;--pt:translateX(calc((var(--k) - 1) * var(--f,0) * 70px)) translateZ(calc(var(--k) * 40px - 80px)) rotateY(calc(-28deg + var(--f,0) * 18deg)) rotateZ(calc((var(--k) - 1) * var(--f,0) * 4deg))}
+  .page h3{font-size:18px}
+  .page p{font-size:11.5px}
+  .route{grid-template-columns:1fr;gap:10px;margin-top:40px;max-width:420px}
+  .route-track{display:none}
+  .node{padding:14px 18px}
+  .node b{margin-top:6px}
+  .js .route .node[data-in]{transform:rotateX(50deg) translateY(50px)}
+  .js .route .node[data-in].on{transform:rotateX(calc(var(--r) * 6deg))}
+  .layers{height:340px}
+  .layers-inner{--gap:calc(18px + var(--f,0) * 40px)}
+  .layers .layer{width:min(300px,82vw);min-height:92px;padding:14px 16px}
+  .floor{height:34vh}
+}
+@media (max-width:600px){
+  .s-docs .sub:last-of-type{display:none}
+  .s-near .title{font-size:30px}
+  .node small{display:none}
+  .live{font-size:12px}
+}
+
+/* Performance: blur-free glow with a smoothly changing colour, compositor-only floor */
+@property --glow{syntax:'<color>';inherits:true;initial-value:#d5fa52}
+body{--glow:#d5fa52;transition:--glow 1.6s ease}
+body[data-tone=blue]{--glow:#5b74ff}
+body[data-tone=amber]{--glow:#ff8a4c}
+.glow i,body[data-tone] .glow i{filter:none;background:radial-gradient(closest-side,color-mix(in srgb,var(--glow) 100%,transparent),color-mix(in srgb,var(--glow) 35%,transparent) 45%,transparent 100%);opacity:.2;width:80vmax;height:80vmax;will-change:transform}
+.glow i:first-child{left:-28vmax;top:-36vmax}
+.glow i:last-child{right:-34vmax;bottom:-44vmax;opacity:.13}
+.floor-plane{left:-30%;right:-30%;top:-90px;height:210%;transform-origin:50% 90px;background-position:center 0;transform:rotateX(72deg) rotateZ(var(--fz,0deg)) translate3d(0,var(--gy,0px),0);will-change:transform}

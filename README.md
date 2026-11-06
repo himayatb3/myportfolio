@@ -1,6 +1,6 @@
 # Himayat Portfolio
 
-A portfolio told as a story. The page stays fixed like the opening of a film or game, and scrolling plays it forward: a short "based on a true story" opening, then eight chapters from Kashmir to Dubai, ending with contact details.
+A portfolio told as a story. The page stays fixed like the opening of a film or game, and scrolling plays it forward: a short "based on a true story" opening, then ten chapters from Kashmir to Dubai and the HSE rebuild happening now, ending with contact details.
 
 ## Run
 Open `index.html` in a browser. No install or build step. VS Code Live Server works too.
@@ -21,6 +21,12 @@ Inside a chapter, elements react to how far through it the reader is (0 to 1):
 - `class="scrub" data-from=".1" data-to=".6"` — words light up one by one.
 - `data-count="88" data-from=".05" data-to=".45"` — the number counts up.
 - `data-fill=".2,.7"` — sets the CSS variable `--f` from 0 to 1, used for drawn lines.
+
+## 3D
+- Chapters travel through depth: each new one rises out of the distance and the old one flies past the camera.
+- A grid floor moves toward you as you scroll; on a mouse, the whole stage leans toward the pointer.
+- Per chapter: extruded type that turns with the scroll (Dubai, 88+), workflow cards that swing in, modules that rise off a tilted map, fanned design documents, a curved near-miss route, an exploded isometric stack, and a name that flips up word by word.
+- All of it lives in the "3D LAYER" section at the bottom of style.css.
 
 To add a chapter, copy a `<section class="scene">` block and change the text and numbers. The timeline dots are built automatically.
 

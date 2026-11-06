@@ -30,6 +30,7 @@
 <!-- Cinematic letterbox, opens as the story begins -->
 <div class="bars" aria-hidden="true"><i></i><i></i></div>
 <div class="glow" aria-hidden="true"><i></i><i></i></div>
+<div class="floor" aria-hidden="true"><div class="floor-plane"></div></div>
 
 <header class="hud">
   <a class="wordmark" href="#top" data-chapter-jump="0" aria-label="Back to the start">hb<span>✳</span></a>
@@ -49,7 +50,7 @@
     <!-- PROLOGUE -->
     <section class="scene s-prologue" data-chapter="Prologue" data-title="" data-len="1.5" data-tone="lime">
       <div class="center narrow">
-        <p class="kicker" data-in="0">A story in eight chapters</p>
+        <p class="kicker" data-in="0">A story in ten chapters</p>
         <p class="scrub display" data-from=".08" data-to=".62">Every piece of software begins as a problem someone lives with <em>every single day.</em></p>
         <p class="sub" data-in=".66">This is the story of someone who builds the fix.</p>
       </div>
@@ -91,7 +92,7 @@
       <div class="ghost-num" data-fill="0,1" aria-hidden="true">20K+</div>
       <div class="center">
         <p class="kicker" data-in="0">Chapter III · September 2025</p>
-        <h2 class="mega" data-in=".08"><em>Dubai.</em></h2>
+        <div class="turn" data-fill="0,1"><h2 class="mega" data-in=".08"><em>Dubai.</em></h2></div>
         <p class="lead center-text" data-in=".32">Software Developer at <strong>NAFFCO FZCO</strong>, a fire and life-safety company of 20,000+ people.</p>
         <p class="sub center-text" data-in=".55">At this scale, a lost form isn’t paperwork. It’s a risk.</p>
       </div>
@@ -120,7 +121,7 @@
       <div class="center">
         <p class="kicker" data-in="0">Chapter V · NAFFCO eConnect</p>
         <h2 class="title" data-in=".04">One system <em>became many.</em></h2>
-        <ul class="modules">
+        <div class="city"><ul class="modules" data-fill=".08,.8">
           <li data-in=".16"><b>Incidents</b><small>HSE</small></li>
           <li data-in=".21"><b>Observations</b><small>HSE</small></li>
           <li data-in=".26"><b>ESL &amp; DCD requests</b><small>Engineering</small></li>
@@ -130,7 +131,7 @@
           <li data-in=".46"><b>Fire-alarm monitoring</b><small>SignalR · IoT</small></li>
           <li data-in=".51"><b>HR self-service</b><small>People</small></li>
           <li data-in=".56"><b>Chemical logs</b><small>Safety</small></li>
-        </ul>
+        </ul></div>
         <p class="sub center-text" data-in=".7">Requests with a clear next step. Deliveries with proof. Alarms that become decisions.</p>
       </div>
     </section>
@@ -138,38 +139,86 @@
     <!-- VI -->
     <section class="scene s-numbers" data-chapter="Chapter VI" data-title="By the numbers" data-len="1.8" data-tone="lime">
       <div class="center">
-        <p class="kicker" data-in="0">Chapter VI · Eleven months</p>
-        <p class="big"><span class="count" data-count="88" data-from=".06" data-to=".46">88</span><sup>+</sup></p>
-        <p class="lead center-text" data-in=".2">production APIs. Real business behind each one.</p>
+        <p class="kicker" data-in="0">Chapter VI · One year in</p>
+        <div class="turn" data-fill="0,1"><p class="big"><span class="count" data-count="88" data-from=".06" data-to=".46">88</span><sup>+</sup></p></div>
+        <p class="lead center-text" data-in=".2">production APIs in my first eleven months. <em>And counting.</em></p>
         <dl class="stats">
           <div data-in=".5"><dt><span class="count" data-count="8" data-from=".5" data-to=".66">8</span>+</dt><dd>business modules</dd></div>
           <div data-in=".58"><dt>~<span class="count" data-count="350" data-from=".58" data-to=".74">350</span><small>ms</small></dt><dd>incident creation with 4–7 files</dd></div>
-          <div data-in=".66"><dt><span class="count" data-count="2" data-from=".66" data-to=".8">2</span>+</dt><dd>years in production software</dd></div>
+          <div data-in=".66"><dt><span class="count" data-count="1" data-from=".66" data-to=".8">1</span>+</dt><dd>year at NAFFCO, 2+ in production</dd></div>
         </dl>
       </div>
     </section>
 
-    <!-- VII -->
-    <section class="scene s-layers" data-chapter="Chapter VII" data-title="Under the surface" data-len="2" data-tone="blue">
+
+    <!-- VII — present day: documentation-first re-architecture -->
+    <section class="scene s-docs" data-chapter="Chapter VII" data-title="Rebuilding it right" data-len="2.3" data-tone="blue">
       <div class="split">
         <div>
-          <p class="kicker" data-in="0">Chapter VII · The full stack</p>
-          <h2 class="title" data-in=".04">From the button you click <em>to the query underneath it.</em></h2>
-          <p class="sub" data-in=".7">Stored procedures, execution plans, indexing and server-side pagination, so the screen stays fast when the data doesn’t stay small.</p>
+          <p class="kicker" data-in="0">Chapter VII · Now · 2026</p>
+          <h2 class="title" data-in=".04">Not a migration. <em>A redesign.</em></h2>
+          <p class="sub" data-in=".16">I’m rebuilding the HSE system on a new, scalable low-level design, fixing its flaws module by module instead of carrying them across.</p>
+          <p class="sub" data-in=".62">Every module starts as a document. The design and its cases come first, then the code, from controller to repository.</p>
         </div>
-        <div class="layers">
-          <div class="layer" data-in=".18"><span>Interface</span><b>Angular · TypeScript · RxJS · PrimeNG · AG Grid</b></div>
-          <div class="layer" data-in=".32"><span>Services</span><b>C# · ASP.NET Core · EF Core · Dapper · SignalR · JWT</b></div>
-          <div class="layer" data-in=".46"><span>Data</span><b>SQL Server · T-SQL · TVPs · MySQL · PostgreSQL</b></div>
-          <div class="layer next" data-in=".6"><span>Next</span><b>AWS · CI/CD · Kafka · RAG</b></div>
+        <div class="docs" data-fill=".2,.85">
+          <article class="page" style="--k:0" data-in=".22">
+            <header><span>HSE · LLD</span><span>v2</span></header>
+            <h3>Low-level design</h3>
+            <p>Modules · data model · roles · approval rules</p>
+            <i class="lines"></i>
+          </article>
+          <article class="page" style="--k:1" data-in=".34">
+            <header><span>Incident · Use cases</span><span>v2</span></header>
+            <h3>Multiple victims &amp; witnesses</h3>
+            <p>Each person on a report carries their own attachments.</p>
+            <i class="lines"></i>
+          </article>
+          <article class="page" style="--k:2" data-in=".46">
+            <header><span>Near-miss · Spec</span><span>new</span></header>
+            <h3>Routing &amp; roles</h3>
+            <p>Reporter → Assistant Manager → Safety Officer</p>
+            <i class="lines"></i>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- VIII -->
-    <section class="scene s-reveal" data-chapter="Chapter VIII" data-title="The developer" data-len="1.7" data-tone="lime">
+    <!-- VIII — near miss -->
+    <section class="scene s-near" data-chapter="Chapter VIII" data-title="Near miss" data-len="2.3" data-tone="amber">
       <div class="center">
-        <p class="kicker" data-in="0">Chapter VIII · That’s the story so far</p>
+        <p class="kicker" data-in="0">Chapter VIII · Near-miss reporting</p>
+        <h2 class="title" data-in=".04">The best incident is <em>the one that never happens.</em></h2>
+        <div class="route" data-fill=".22,.78">
+          <div class="route-track" aria-hidden="true"><i class="route-dot"></i></div>
+          <div class="node" style="--r:1" data-in=".22"><span>01 · Anyone</span><b>Reports what almost happened</b><small>Any eConnect user, or an HSE Safety Officer</small></div>
+          <div class="node" style="--r:0" data-in=".42"><span>02 · Routed</span><b>Assistant Manager</b><small>Matched to the location’s category</small></div>
+          <div class="node" style="--r:-1" data-in=".62"><span>03 · Owned</span><b>Safety Officer assigned</b><small>Follows it up before it becomes an incident</small></div>
+        </div>
+        <p class="live amber" data-in=".8"><i></i>Now designing · part of the HSE rebuild</p>
+      </div>
+    </section>
+
+    <!-- IX -->
+    <section class="scene s-layers" data-chapter="Chapter IX" data-title="Under the surface" data-len="2" data-tone="blue">
+      <div class="split">
+        <div>
+          <p class="kicker" data-in="0">Chapter IX · The full stack</p>
+          <h2 class="title" data-in=".04">From the button you click <em>to the query underneath it.</em></h2>
+          <p class="sub" data-in=".7">Stored procedures, execution plans, indexing and server-side pagination, so the screen stays fast when the data doesn’t stay small.</p>
+        </div>
+        <div class="layers" data-fill=".1,.75"><div class="layers-inner">
+          <div style="--i:3" class="layer" data-in=".18"><span>Interface</span><b>Angular · TypeScript · RxJS · PrimeNG · AG Grid</b></div>
+          <div style="--i:2" class="layer" data-in=".32"><span>Services</span><b>C# · ASP.NET Core · EF Core · Dapper · SignalR · JWT</b></div>
+          <div style="--i:1" class="layer" data-in=".46"><span>Data</span><b>SQL Server · T-SQL · TVPs · MySQL · PostgreSQL</b></div>
+          <div style="--i:0" class="layer next" data-in=".6"><span>Next</span><b>AWS · CI/CD · Kafka · RAG</b></div>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- X -->
+    <section class="scene s-reveal" data-chapter="Chapter X" data-title="The developer" data-len="1.7" data-tone="lime">
+      <div class="center">
+        <p class="kicker" data-in="0">Chapter X · That’s the story so far</p>
         <h2 class="name"><span data-in=".1">Mohammad</span> <span data-in=".17">Himayat</span> <span data-in=".24">Ullah</span> <span class="hl" data-in=".31">Bhat.</span></h2>
         <p class="lead center-text" data-in=".48">Full Stack Developer in Dubai.<br><em>Complex workflows. Considered engineering.</em></p>
       </div>
@@ -217,6 +266,9 @@
           <li>Owned Incident and Observation Management through multi-level approvals, corrective actions, escalation, signatures, and reporting. The Incident module went live in July 2026.</li>
           <li>Built ESL, DCD, Shop Drawing Requests, Shop Drawing Attendance, Chemical Logs, and Item Delivery workflows.</li>
           <li>Designed and tuned SQL Server data access and supported production issues across backend and frontend layers.</li>
+          <li>Now reworking the HSE system onto a new, scalable low-level design, module by module, writing the design documentation and use cases before implementation.</li>
+          <li>Reworking the Incident module to support multiple victims and witnesses per report, each with their own attachments.</li>
+          <li>Designing the Near-Miss reporting module: open reporting for any eConnect user or HSE Safety Officer, routing to the Assistant Manager for the location’s category, and Safety Officer assignment.</li>
         </ul>
       </article>
       <article>
@@ -233,6 +285,7 @@
       <h3>Selected work</h3>
       <dl class="work">
         <div><dt>eConnect HSE</dt><dd>Observations and incidents in structured workflows: staged verification and approvals, role-based visibility, rejection paths, escalation, signatures, attachments, QuestPDF reports, investigation, witness and injured-person records, corrective actions.</dd></div>
+        <div><dt>HSE re-architecture</dt><dd>In progress: a documentation-first rebuild on a new low-level design. Incident v2 (multiple victims and witnesses with attachments) first, with Near-Miss reporting designed alongside.</dd></div>
         <div><dt>Engineering requests</dt><dd>ESL, DCD, Shop Drawing Requests and attendance: reference-number generation, transactional writes with TVPs, engineer assignment, document handling, permission-aware lists.</dd></div>
         <div><dt>Delivery operations</dt><dd>ERP-linked delivery-note lookup, driver assignment, status, e-signatures and enforced proof-of-delivery attachments, with status, driver and date filters.</dd></div>
         <div><dt>Notification service</dt><dd>Central service with user targeting, Firebase push, per-application unread counts, read state, pagination and mobile/web deep links.</dd></div>
@@ -247,6 +300,7 @@
         <div><dt>Backend &amp; APIs</dt><dd>C# · ASP.NET Core 8/9 · REST · EF Core · Dapper · ADO.NET · LINQ · Mapster · JWT · role-based access · Serilog · IMemoryCache · QuestPDF</dd></div>
         <div><dt>Frontend</dt><dd>Angular · TypeScript · RxJS · HTML &amp; CSS · PrimeNG · AG Grid · ECharts · Leaflet · Bootstrap</dd></div>
         <div><dt>Data &amp; performance</dt><dd>SQL Server · T-SQL · MySQL · PostgreSQL · stored procedures · transactions · CTEs · TVPs · indexing · execution plans · server-side pagination</dd></div>
+        <div><dt>Design &amp; documentation</dt><dd>Low-level design documents · use cases and edge cases · role and approval rules written before code</dd></div>
         <div><dt>Integration &amp; delivery</dt><dd>SignalR · Firebase Cloud Messaging · Git · IIS · Postman · Swagger · ERP integration · Windows/Linux deployment</dd></div>
         <div><dt>Growing</dt><dd>AWS (EC2, S3, Lambda) · GitHub Actions · CodePipeline · Kafka · RAG/Ollama · domain-driven design</dd></div>
       </dl>
