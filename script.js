@@ -1,518 +1,269 @@
+/*
+  Story engine
+  The page is a tall scroll track with a sticky, full-screen stage on top.
+  Each .scene owns a slice of the scroll (data-len, in screen heights).
+  Inside a scene, elements react to the scene's progress p (0 → 1):
+    data-in=".3"            reveal once p reaches .3 (and hide again when scrolling back)
+    data-fill=".2,.7"       sets --f from 0 → 1 between those points (lines, scale)
+    .scrub data-from/to     lights words one by one
+    data-count data-from/to counts a number up
+*/
 (() => {
   'use strict';
-  window.__motion = true;
+  window.__story = true;
 
   const root = document.documentElement;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const hasIO = 'IntersectionObserver' in window;
-  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-  const $ = (sel, ctx = document) => ctx.querySelector(sel);
-  const $$ = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+  const story = root.classList.contains('js');
+  const resume = document.getElementById('resume');
 
-  const COLORS = ['#ffc53d', '#ff5470', '#5b8cff', '#3df2b0', '#b78bff'];
-
-  /* ==========================================================
-     Pixel sprite that runs along the XP bar
-     ========================================================== */
-  const PIXELS = { h: '#ffc53d', v: '#0a0c1a', w: '#e9ecff', b: '#5b8cff', m: '#3df2b0', k: '#2b3163', r: '#ff5470' };
-  const HEAD = ['....hhhh....', '...hhhhhh...', '...hvvvvh...', '...hvwvvh...', '...hhhhhh...', '....bbbb....', '...bmmmmb...'];
-  const BODY = {
-    stand: ['..bbmmmmbb..', '...bmmmmb...', '....kkkk....', '....kk.kk...', '...rr..rr...'],
-    run1:  ['.bbmmmmb....', '...bmmmmbb..', '....kkkk....', '...kk...kk..', '..rr.....rr.'],
-    run2:  ['...bmmmmbb..', '.bbmmmmb....', '....kkkk....', '....kkkk....', '....rrrr....']
-  };
-  const spriteSvg = {};
-  Object.keys(BODY).forEach(name => {
-    const rects = HEAD.concat(BODY[name]).map((row, y) =>
-      Array.from(row).map((ch, x) => PIXELS[ch] ? `<rect x="${x}" y="${y}" width="1" height="1" fill="${PIXELS[ch]}"/>` : '').join('')
-    ).join('');
-    spriteSvg[name] = `<svg viewBox="0 0 12 12" width="24" height="24" shape-rendering="crispEdges" aria-hidden="true" focusable="false">${rects}</svg>`;
-  });
-
-  const sprite = $('#sprite');
-  if (sprite) sprite.innerHTML = spriteSvg.stand;
-
-  /* ==========================================================
-     Canvas: parallax starfield + pixel bursts
-     ========================================================== */
-  const starsCanvas = $('#stars');
-  const burstCanvas = $('#burst');
-  const sctx = starsCanvas.getContext('2d');
-  const bctx = burstCanvas.getContext('2d');
-  const SPEEDS = [0.03, 0.08, 0.16];
-  let stars = [];
-  let W = 0, H = 0, DPR = 1;
-
-  function sizeCanvases() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth;
-    H = window.innerHeight;
-    [starsCanvas, burstCanvas].forEach(c => { c.width = W * DPR; c.height = H * DPR; });
-    sctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    bctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    const count = Math.round((W * H) / 9000);
-    stars = Array.from({ length: count }, () => {
-      const layer = Math.random() < 0.55 ? 0 : (Math.random() < 0.6 ? 1 : 2);
-      return {
-        x: Math.round(Math.random() * W), y: Math.random() * H, layer,
-        size: layer === 2 ? 3 : 2, alpha: 0.22 + Math.random() * 0.45,
-        phase: Math.random() * 6.28,
-        color: Math.random() < 0.09 ? COLORS[Math.floor(Math.random() * COLORS.length)] : '#cfd6ff'
-      };
-    });
-    drawStars(0, window.scrollY);
-  }
-
-  function drawStars(t, y) {
-    sctx.clearRect(0, 0, W, H);
-    for (const s of stars) {
-      let py = (s.y - y * SPEEDS[s.layer]) % H;
-      if (py < 0) py += H;
-      const twinkle = reduce ? 1 : 0.65 + 0.35 * Math.sin(t / 700 + s.phase);
-      sctx.globalAlpha = s.alpha * twinkle;
-      sctx.fillStyle = s.color;
-      sctx.fillRect(s.x, Math.round(py), s.size, s.size);
+  /* ---------- Résumé (works in every mode) ---------- */
+  function openResume(e) {
+    if (e) e.preventDefault();
+    if (story && resume && typeof resume.showModal === 'function') {
+      resume.showModal();
+      resume.scrollTop = 0;
+    } else if (resume) {
+      resume.scrollIntoView();
     }
-    sctx.globalAlpha = 1;
   }
+  document.querySelectorAll('[data-open-resume]').forEach(el => el.addEventListener('click', openResume));
+  document.querySelectorAll('[data-close-resume]').forEach(el => el.addEventListener('click', () => resume.close()));
+  if (resume) resume.addEventListener('click', e => { if (e.target === resume) resume.close(); });
 
-  let particles = [];
-  let burstRunning = false;
+  if (!story) return;
 
-  function burst(x, y, count, power = 1) {
-    if (reduce) return;
-    for (let i = 0; i < count; i++) {
-      particles.push({
-        x, y,
-        vx: (Math.random() - 0.5) * 9 * power,
-        vy: (-2 - Math.random() * 7) * power,
-        life: 1,
-        size: 3 + Math.floor(Math.random() * 3),
-        color: COLORS[Math.floor(Math.random() * COLORS.length)]
+  /* ---------- Setup ---------- */
+  const track = document.querySelector('.story');
+  const scenes = Array.from(document.querySelectorAll('.scene')).map(el => ({
+    el,
+    len: parseFloat(el.dataset.len) || 1.5,
+    chapter: el.dataset.chapter || '',
+    title: el.dataset.title || '',
+    tone: el.dataset.tone || 'lime',
+    reveals: Array.from(el.querySelectorAll('[data-in]')).map(r => ({
+      el: r, at: parseFloat(r.dataset.in) || 0, out: r.dataset.out ? parseFloat(r.dataset.out) : 9, on: false
+    })),
+    fills: Array.from(el.querySelectorAll('[data-fill]')).map(f => {
+      const [a, b] = f.dataset.fill.split(',').map(Number);
+      return { el: f, a, b, v: -1 };
+    }),
+    scrubs: Array.from(el.querySelectorAll('.scrub')).map(s => ({
+      words: splitWords(s), from: parseFloat(s.dataset.from) || 0, to: parseFloat(s.dataset.to) || 1, v: -1
+    })),
+    counts: Array.from(el.querySelectorAll('[data-count]')).map(c => ({
+      el: c, target: parseFloat(c.dataset.count), from: parseFloat(c.dataset.from) || 0, to: parseFloat(c.dataset.to) || 1, v: -1
+    })),
+    start: 0, op: -1, vis: null
+  }));
+
+  // Wrap each word of a narration line in a span, keeping inner tags like <em>
+  function splitWords(container) {
+    const words = [];
+    const walk = node => {
+      Array.from(node.childNodes).forEach(child => {
+        if (child.nodeType === 3) {
+          const frag = document.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(part => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+            const w = document.createElement('span');
+            w.className = 'w';
+            w.textContent = part;
+            frag.appendChild(w);
+            words.push(w);
+          });
+          child.replaceWith(frag);
+        } else if (child.nodeType === 1) {
+          walk(child);
+        }
       });
-    }
-    if (!burstRunning) { burstRunning = true; requestAnimationFrame(stepBurst); }
+    };
+    walk(container);
+    return words;
   }
 
-  function stepBurst() {
-    bctx.clearRect(0, 0, W, H);
-    particles = particles.filter(p => p.life > 0);
-    for (const p of particles) {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.3; p.life -= 0.018;
-      bctx.globalAlpha = Math.max(p.life, 0);
-      bctx.fillStyle = p.color;
-      bctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
-    }
-    bctx.globalAlpha = 1;
-    if (particles.length) requestAnimationFrame(stepBurst);
-    else { burstRunning = false; bctx.clearRect(0, 0, W, H); }
-  }
-
-  /* ==========================================================
-     Achievement toasts
-     ========================================================== */
-  const TROPHY = '<svg viewBox="0 0 10 10" width="22" height="22" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><rect x="2" y="1" width="6" height="4"/><rect x="0" y="1" width="2" height="1"/><rect x="0" y="2" width="1" height="2"/><rect x="1" y="4" width="1" height="1"/><rect x="8" y="1" width="2" height="1"/><rect x="9" y="2" width="1" height="2"/><rect x="8" y="4" width="1" height="1"/><rect x="3" y="5" width="4" height="1"/><rect x="4" y="6" width="2" height="2"/><rect x="2" y="8" width="6" height="1"/></svg>';
-  const toastBox = $('.toasts');
-  const awarded = new Set();
-  const queue = [];
-  let showing = false;
-
-  function award(key, title, text) {
-    if (reduce || !toastBox || awarded.has(key)) return;
-    awarded.add(key);
-    queue.push({ title, text });
-    if (!showing) nextToast();
-  }
-
-  function nextToast() {
-    const item = queue.shift();
-    if (!item) { showing = false; return; }
-    showing = true;
-    const el = document.createElement('div');
-    el.className = 'toast';
-    el.innerHTML = `<span class="ico">${TROPHY}</span><div><small>Achievement unlocked</small><span class="t-title"></span><span class="t-text"></span></div>`;
-    $('.t-title', el).textContent = item.title;
-    $('.t-text', el).textContent = item.text;
-    toastBox.appendChild(el);
-    setTimeout(() => {
-      el.classList.add('out');
-      setTimeout(() => { el.remove(); nextToast(); }, 420);
-    }, 3800);
-  }
-
-  /* ==========================================================
-     HUD: levels, XP bar, stage tint
-     ========================================================== */
-  const hud = $('.hud');
-  const xp = $('.xp');
-  const marksEl = $('.xp-marks');
-  const lvBox = $('.lv');
-  const lvText = $('[data-lv]');
-  const stageName = $('[data-stage-name]');
-  const navLinks = $$('nav a');
-  const sections = $$('[data-level]').map(el => ({ el, level: +el.dataset.level, name: el.dataset.name, hue: +el.dataset.hue }));
-  const marks = sections.slice(1).map(s => {
-    const i = document.createElement('i');
-    marksEl.appendChild(i);
-    return { i, s, m: 0 };
+  /* ---------- Timeline (chapter dots) ---------- */
+  const timeline = document.querySelector('.timeline ol');
+  const timelineFill = document.querySelector('.timeline');
+  const ticks = scenes.map((s, i) => {
+    const li = document.createElement('li');
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    const label = s.title ? `${s.chapter}: ${s.title}` : s.chapter;
+    btn.setAttribute('aria-label', 'Go to ' + label);
+    btn.innerHTML = `<span>${label}</span>`;
+    btn.addEventListener('click', () => goTo(i));
+    li.appendChild(btn);
+    timeline.appendChild(li);
+    return li;
   });
 
-  let docMax = 1;
-  function measure() {
-    docMax = Math.max(1, root.scrollHeight - window.innerHeight);
-    marks.forEach(mk => {
-      const top = mk.s.el.getBoundingClientRect().top + window.scrollY;
-      mk.m = clamp((top - window.innerHeight * 0.55) / docMax, 0, 1);
-      mk.i.style.setProperty('--m', mk.m.toFixed(4));
-    });
+  /* ---------- Layout ---------- */
+  let vh = window.innerHeight;
+  let trackTop = 0;
+  let total = 0;
+
+  function layout() {
+    vh = window.innerHeight;
+    let acc = 0;
+    scenes.forEach(s => { s.start = acc; acc += s.len * vh; });
+    total = acc;
+    track.style.height = (total + vh) + 'px';
+    trackTop = track.getBoundingClientRect().top + window.scrollY;
+    scenes.forEach((s, i) => { ticks[i].style.left = (s.start / total * 100) + '%'; });
+    ticks[ticks.length - 1].style.left = '100%';
   }
 
-  let current = sections[0];
-  let maxLevel = 1;
-
-  function applyStage(s) {
-    lvText.textContent = 'LV ' + String(s.level).padStart(2, '0');
-    stageName.textContent = s.name;
-    root.style.setProperty('--hue', s.hue);
-    navLinks.forEach(link => {
-      const active = link.hash === '#' + s.el.id;
-      link.classList.toggle('active', active);
-      if (active) link.setAttribute('aria-current', 'location');
-      else link.removeAttribute('aria-current');
-    });
+  function goTo(i) {
+    const s = scenes[i];
+    const y = i === 0 ? 0 : trackTop + s.start + s.len * vh * (i === scenes.length - 1 ? 0.9 : 0.8);
+    window.scrollTo({ top: y, behavior: 'smooth' });
   }
+  document.querySelectorAll('[data-chapter-jump]').forEach(el => el.addEventListener('click', e => {
+    e.preventDefault();
+    goTo(parseInt(el.dataset.chapterJump, 10) || 0);
+  }));
+  document.querySelectorAll('[data-skip]').forEach(el => el.addEventListener('click', () => goTo(scenes.length - 1)));
 
-  function levelUp() {
-    if (reduce) return;
-    lvBox.classList.remove('pop'); hud.classList.remove('flash');
-    void hud.offsetWidth;
-    lvBox.classList.add('pop'); hud.classList.add('flash');
-    if (sprite) {
-      sprite.classList.remove('jump'); void sprite.offsetWidth; sprite.classList.add('jump');
-      const r = sprite.getBoundingClientRect();
-      burst(r.left + r.width / 2, r.top + 6, 26);
-    }
-  }
+  /* ---------- Render loop ---------- */
+  const clamp = v => v < 0 ? 0 : v > 1 ? 1 : v;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const hudChapter = document.querySelector('.hud-chapter');
+  const hudNum = hudChapter.querySelector('.hud-num');
+  const hudName = hudChapter.querySelector('.hud-name');
+  const cue = document.querySelector('.cue');
+  let active = -1;
+  let smooth = Math.max(0, window.scrollY - trackTop);
+  let lastSmooth = -1;
 
-  function pickStage(y) {
-    const line = window.innerHeight * 0.55;
-    let active = sections[0];
-    for (const s of sections) if (s.el.getBoundingClientRect().top <= line) active = s;
-    if (y >= docMax - 4) active = sections[sections.length - 1];
-    return active;
-  }
+  function render(y) {
+    const last = scenes.length - 1;
 
-  function updateStage(y, silent) {
-    const active = pickStage(y);
-    if (active === current && !silent) return;
-    current = active;
-    applyStage(active);
-    if (active.level > maxLevel) {
-      maxLevel = active.level;
-      if (!silent) levelUp();
-    }
-  }
+    scenes.forEach((s, i) => {
+      const p = (y - s.start) / (s.len * vh);
 
-  /* ==========================================================
-     Quest chain (steps tick off as you scroll through the card)
-     ========================================================== */
-  const quest = $('[data-quest]');
-  const questCard = quest ? quest.closest('.featured') : null;
-  const steps = quest ? $$('li', quest) : [];
-  const questState = $('[data-quest-state]');
-  let questDone = -1;
+      // Scene fades: in over the first 8%, out over the last 10%
+      const enter = i === 0 ? 1 : clamp(p / 0.08);
+      const exit = i === last ? 1 : clamp((1 - p) / 0.1);
+      const op = Math.min(enter, exit);
+      const visible = op > 0.001;
 
-  function updateQuest() {
-    if (!quest) return;
-    let n = steps.length;
-    if (!reduce) {
-      const r = questCard.getBoundingClientRect();
-      const q = clamp((window.innerHeight * 0.8 - r.top) / (r.height * 0.8), 0, 1);
-      n = Math.min(steps.length, Math.floor(q * steps.length + 0.001));
-    }
-    if (n === questDone) return;
-    questDone = n;
-    steps.forEach((li, i) => li.classList.toggle('done', i < n));
-    const complete = n === steps.length;
-    quest.classList.toggle('complete', complete);
-    if (questState) {
-      if (reduce) questState.textContent = '4 steps';
-      else questState.textContent = complete ? 'Quest complete' : (n === 0 ? '4 steps' : n + '/' + steps.length);
-    }
-    if (complete) award('quest', 'Incident module is live', 'Went live in July 2026');
-  }
-
-  /* ==========================================================
-     Skill tree and campaign trail (a beam fills as you scroll)
-     ========================================================== */
-  const tree = $('[data-tree]');
-  const treeNodes = tree ? $$('.skill-row', tree) : [];
-  const trail = $('[data-trail]');
-  const trailNodes = trail ? $$('.job', trail) : [];
-
-  function updateBeam(box, nodes, cls, padTop, padBottom, nodeOffset) {
-    if (!box) return 0;
-    let fill = 1;
-    const head = window.innerHeight * 0.62;
-    if (!reduce) {
-      const r = box.getBoundingClientRect();
-      fill = clamp((head - r.top - padTop) / Math.max(1, r.height - padTop - padBottom), 0, 1);
-    }
-    box.style.setProperty('--fill', fill.toFixed(3));
-    nodes.forEach(n => {
-      const on = reduce || head >= n.getBoundingClientRect().top + nodeOffset;
-      if (on !== n.classList.contains(cls)) n.classList.toggle(cls, on);
-    });
-    return fill;
-  }
-
-  function updateBeams() {
-    if (updateBeam(tree, treeNodes, 'unlocked', 20, 20, 48) >= 0.985) {
-      award('stack', 'Full stack unlocked', 'From the interface to the query underneath');
-    }
-    if (updateBeam(trail, trailNodes, 'saved', 38, 0, 34) >= 0.985) {
-      award('years', '2+ years in production', 'From requirements to release');
-    }
-  }
-
-  /* ==========================================================
-     Main loop
-     ========================================================== */
-  let lastY = window.scrollY;
-  let idleSince = -1000;
-  let frameName = 'stand';
-  let lastStarDraw = 0;
-  let first = true;
-
-  function frame(t) {
-    if (root.classList.contains('playing')) { lastY = window.scrollY; requestAnimationFrame(frame); return; }
-    const y = window.scrollY;
-    const delta = y - lastY;
-
-    if (delta !== 0 || first) {
-      const p = clamp(y / docMax, 0, 1);
-      xp.style.setProperty('--p', p.toFixed(4));
-      marks.forEach(mk => mk.i.classList.toggle('hit', p >= mk.m - 0.0005));
-      updateStage(y, false);
-      updateQuest();
-      updateBeams();
-      first = false;
-    }
-
-    if (!reduce && sprite) {
-      if (delta !== 0) {
-        idleSince = t;
-        sprite.style.setProperty('--dir', delta > 0 ? 1 : -1);
+      if (visible !== s.vis) {
+        s.el.style.visibility = visible ? 'visible' : 'hidden';
+        s.el.setAttribute('aria-hidden', visible ? 'false' : 'true');
+        s.vis = visible;
       }
-      const running = t - idleSince < 170;
-      const want = running ? (Math.floor(t / 110) % 2 ? 'run1' : 'run2') : 'stand';
-      if (want !== frameName) { frameName = want; sprite.innerHTML = spriteSvg[want]; }
-    }
+      if (!visible && s.op === 0) return;
+      if (Math.abs(op - s.op) > 0.001 || op === 0 || op === 1) {
+        const out = 1 - exit;
+        const into = 1 - enter;
+        const ty = out > 0 ? -60 * easeOut(out) : 60 * into;
+        const sc = out > 0 ? 1 - 0.04 * out : 1;
+        s.el.style.opacity = op.toFixed(3);
+        s.el.style.transform = `translate3d(0,${ty.toFixed(1)}px,0) scale(${sc.toFixed(4)})`;
+        s.op = op;
+      }
 
-    if (!reduce && (delta !== 0 || t - lastStarDraw > 90)) {
-      drawStars(t, y);
-      lastStarDraw = t;
-    } else if (reduce && delta !== 0) {
-      drawStars(0, y);
-    }
+      // Element reveals
+      s.reveals.forEach(r => {
+        const on = p >= r.at && p < r.out;
+        if (on !== r.on) { r.el.classList.toggle('on', on); r.on = on; }
+      });
 
-    lastY = y;
+      // Progress-driven fills
+      s.fills.forEach(f => {
+        const v = clamp((p - f.a) / (f.b - f.a));
+        if (Math.abs(v - f.v) > 0.0005) { f.el.style.setProperty('--f', v.toFixed(4)); f.v = v; }
+      });
+
+      // Word-by-word narration
+      s.scrubs.forEach(sc => {
+        const t = clamp((p - sc.from) / (sc.to - sc.from));
+        if (Math.abs(t - sc.v) < 0.0005) return;
+        sc.v = t;
+        const n = sc.words.length;
+        sc.words.forEach((w, k) => {
+          const lit = clamp(t * n - k);
+          w.style.opacity = (0.13 + 0.87 * lit).toFixed(3);
+        });
+      });
+
+      // Counters
+      s.counts.forEach(c => {
+        const t = easeOut(clamp((p - c.from) / (c.to - c.from)));
+        const v = Math.round(c.target * t);
+        if (v !== c.v) { c.el.textContent = v; c.v = v; }
+      });
+    });
+
+    // Which chapter are we in?
+    let current = 0;
+    scenes.forEach((s, i) => { if (y >= s.start - 1) current = i; });
+    if (current !== active) setChapter(current);
+
+    // HUD, timeline, letterbox, cue
+    timelineFill.style.setProperty('--progress', clamp(y / total).toFixed(4));
+    ticks.forEach((t, i) => t.classList.toggle('passed', y >= scenes[i].start - 1));
+    root.style.setProperty('--bars', (1 - clamp((y / vh - 0.25) / 0.9)).toFixed(3));
+    cue.classList.toggle('gone', y > 30);
+  }
+
+  let swapTimer;
+  function setChapter(i) {
+    const prev = active;
+    active = i;
+    const s = scenes[i];
+    document.body.dataset.tone = s.tone;
+    ticks.forEach((t, k) => t.classList.toggle('current', k === i));
+    if (prev === -1) {
+      hudNum.textContent = s.chapter;
+      hudName.textContent = s.title;
+      return;
+    }
+    hudChapter.classList.add('swap');
+    clearTimeout(swapTimer);
+    swapTimer = setTimeout(() => {
+      hudNum.textContent = s.chapter;
+      hudName.textContent = s.title;
+      hudChapter.classList.remove('swap');
+    }, 250);
+  }
+
+  // Smoothly follow the real scroll position so scrubbed text glides instead of stepping
+  function frame() {
+    const target = Math.min(Math.max(window.scrollY - trackTop, 0), total);
+    smooth += (target - smooth) * 0.14;
+    if (Math.abs(target - smooth) < 0.3) smooth = target;
+    if (smooth !== lastSmooth) {
+      render(smooth);
+      lastSmooth = smooth;
+    }
     requestAnimationFrame(frame);
   }
 
-  sizeCanvases();
-  measure();
-  // Settle the HUD to wherever the page was restored to, without celebrating
-  {
-    const active = pickStage(window.scrollY);
-    current = active; maxLevel = active.level; applyStage(active);
-  }
+  layout();
+  if (window.scrollY > 40) root.classList.add('no-opening');
+  render(smooth);
   requestAnimationFrame(frame);
 
   let resizeTimer;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { sizeCanvases(); measure(); first = true; }, 120);
+    resizeTimer = setTimeout(() => {
+      const ratio = total ? Math.max(window.scrollY - trackTop, 0) / total : 0;
+      layout();
+      window.scrollTo(0, trackTop + ratio * total);
+      scenes.forEach(s => { s.op = -1; s.fills.forEach(f => f.v = -1); s.scrubs.forEach(sc => sc.v = -1); });
+      lastSmooth = -1;
+    }, 150);
   });
-  window.addEventListener('load', () => { measure(); first = true; });
-  // Coming back from Play mode: re-measure once the page is on screen again
-  window.addEventListener('portfolio:view', () => requestAnimationFrame(() => { measure(); first = true; sizeCanvases(); }));
-  if ('ResizeObserver' in window) new ResizeObserver(() => { measure(); }).observe(document.body);
 
-  /* ==========================================================
-     Spawn-in reveals and counters
-     ========================================================== */
-  const spawnItems = $$('[data-spawn]');
-  if (reduce || !hasIO) {
-    spawnItems.forEach(el => el.classList.add('in'));
-  } else {
-    const spawnObserver = new IntersectionObserver(entries => {
-      let order = 0;
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        const delay = Math.min(order++, 5) * 0.09;
-        el.style.setProperty('--d', delay + 's');
-        el.classList.add('in');
-        spawnObserver.unobserve(el);
-        if (el.matches('h2')) {
-          const head = el.closest('.section-head');
-          if (head) { head.classList.add('shake'); setTimeout(() => head.classList.remove('shake'), 600); }
-        }
-        setTimeout(() => el.style.removeProperty('--d'), 2000 + delay * 1000);
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-    spawnItems.forEach(el => spawnObserver.observe(el));
-  }
-
-  // Headline: one glitch after it has typed itself out
-  const heading = $('h1');
-  if (heading && !reduce) {
-    setTimeout(() => heading.classList.add('glitch'), 2700);
-    setTimeout(() => heading.classList.remove('glitch'), 3400);
-  }
-
-  const counters = $$('.big-number, .metrics strong, .experience-total strong');
-
-  function prepareCounter(el) {
-    const node = Array.from(el.childNodes).find(n => n.nodeType === 3 && /\d/.test(n.textContent));
-    if (!node) return null;
-    const match = node.textContent.match(/^(\D*)(\d+)(.*)$/s);
-    if (!match) return null;
-    const [, prefix, digits, suffix] = match;
-    node.textContent = prefix + '0' + suffix;
-    return { node, prefix, suffix, target: parseInt(digits, 10) };
-  }
-
-  function runCounter(c, duration) {
-    let start;
-    const step = now => {
-      if (start === undefined) start = now;
-      const p = Math.min((now - start) / duration, 1);
-      c.node.textContent = c.prefix + Math.round(c.target * (1 - Math.pow(1 - p, 4))) + c.suffix;
-      if (p < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
-
-  if (!reduce && hasIO) {
-    const counterObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const c = entry.target.__counter;
-        counterObserver.unobserve(entry.target);
-        if (!c) return;
-        const inHero = entry.target.classList.contains('big-number');
-        setTimeout(() => runCounter(c, inHero ? 1800 : 1500), inHero ? 1900 : 300);
-      });
-    }, { threshold: 0.6 });
-    counters.forEach(el => { el.__counter = prepareCounter(el); counterObserver.observe(el); });
-  }
-
-  // Achievements tied to sections coming into view
-  if (hasIO && !reduce) {
-    const watch = (selector, key, title, text, threshold) => {
-      const target = $(selector);
-      if (!target) return;
-      const io = new IntersectionObserver(entries => {
-        if (entries.some(e => e.isIntersecting)) { award(key, title, text); io.disconnect(); }
-      }, { threshold });
-      io.observe(target);
-    };
-    watch('[data-metrics]', 'apis', '88+ production APIs', 'Delivered in 11 months at NAFFCO', 0.6);
-    watch('.contact h2', 'final', 'Final level reached', 'Open to Full Stack, .NET and Angular roles', 0.7);
-  }
-
-  // Keep the HUD reachable for keyboard users
-  if (hud) hud.addEventListener('focusin', () => hud.classList.remove('flash'));
-
-  /* ==========================================================
-     Cheat code: up up down down left right left right B A
-     ========================================================== */
-  const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-  let konamiAt = 0;
+  // Keyboard: PageDown / PageUp move one chapter at a time
   window.addEventListener('keydown', e => {
-    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-    konamiAt = key === KONAMI[konamiAt] ? konamiAt + 1 : (key === KONAMI[0] ? 1 : 0);
-    if (konamiAt === KONAMI.length) {
-      konamiAt = 0;
-      root.classList.toggle('cheat');
-      burst(window.innerWidth / 2, window.innerHeight * 0.4, 90, 1.4);
-      award('cheat', 'Cheat code accepted', 'Rainbow mode, courtesy of the Konami code');
-    }
+    if (resume && resume.open) return;
+    if (e.key !== 'PageDown' && e.key !== 'PageUp') return;
+    e.preventDefault();
+    const next = e.key === 'PageDown' ? Math.min(active + 1, scenes.length - 1) : Math.max(active - 1, 0);
+    goTo(next);
   });
-
-  if (reduce || !finePointer) return;
-
-  /* ==========================================================
-     Pointer effects: card tilt, spotlight, magnetic buttons, lock-on reticle
-     ========================================================== */
-  $$('.project-card, .player-card').forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width;
-      const y = (e.clientY - r.top) / r.height;
-      card.style.setProperty('--rx', ((0.5 - y) * 6).toFixed(2) + 'deg');
-      card.style.setProperty('--ry', ((x - 0.5) * 8).toFixed(2) + 'deg');
-      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-    card.addEventListener('pointerleave', () => {
-      card.style.removeProperty('--rx');
-      card.style.removeProperty('--ry');
-      card.style.removeProperty('--mx');
-      card.style.removeProperty('--my');
-    });
-  });
-
-  $$('.featured, .metrics > div').forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - r.top) + 'px');
-    });
-  });
-
-  $$('.button, .contact-nav').forEach(btn => {
-    btn.addEventListener('pointermove', e => {
-      const r = btn.getBoundingClientRect();
-      const x = (e.clientX - r.left - r.width / 2) * 0.25;
-      const y = (e.clientY - r.top - r.height / 2) * 0.35;
-      btn.style.transform = `translate(${x}px, ${y}px)`;
-    });
-    btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
-  });
-
-  const reticle = document.createElement('div');
-  reticle.className = 'reticle';
-  reticle.setAttribute('aria-hidden', 'true');
-  reticle.innerHTML = '<i></i><i></i><i></i><i></i>';
-  document.body.appendChild(reticle);
-
-  let mx = -100, my = -100, cx = -100, cy = -100, target = null;
-  window.addEventListener('pointermove', e => { mx = e.clientX; my = e.clientY; reticle.classList.add('on'); }, { passive: true });
-  document.addEventListener('pointerleave', () => reticle.classList.remove('on'));
-  document.addEventListener('pointerover', e => {
-    target = e.target.closest ? e.target.closest('a, summary, button, .tags span') : null;
-    reticle.classList.toggle('lock', !!target);
-  });
-
-  (function follow() {
-    if (target && document.contains(target)) {
-      const r = target.getBoundingClientRect();
-      const pad = 6;
-      reticle.style.width = (r.width + pad * 2) + 'px';
-      reticle.style.height = (r.height + pad * 2) + 'px';
-      cx += (r.left - pad - cx) * 0.35;
-      cy += (r.top - pad - cy) * 0.35;
-    } else {
-      reticle.style.width = '';
-      reticle.style.height = '';
-      cx += (mx - 17 - cx) * 0.25;
-      cy += (my - 17 - cy) * 0.25;
-    }
-    reticle.style.transform = `translate(${cx}px, ${cy}px)`;
-    requestAnimationFrame(follow);
-  })();
 })();
