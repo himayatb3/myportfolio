@@ -1,40 +1,35 @@
 # Himayat Portfolio
 
-# Play mode
-
-The site now opens on a start screen: **Press start** drops you into a side-scrolling world, **Classic view** is the normal scrolling page (also the fallback when JavaScript is unavailable). The choice is remembered for the tab.
-
-**Controls:** arrows / A D to move, Space / W / Up to jump, E / Enter to interact, M to mute. On touch devices an on-screen pad appears.
-
-**What to do:** collect the 10 tech coins, stomp bugs (they only knock you back, there is no game over), walk to doors, flags and the gate and press E, and bump the skill blocks from below. Every project door opens a panel with a short mini-game (workflow order, role visibility, signature pad, notification inbox, alarm classification, booking stages). Contact details are never gated: "Let's talk" is always in the HUD.
-
-**Files:** `game.js` (world, physics, HUD, panels), `minigames.js` (the mini-games), `script.js` (classic scroll view, paused while playing). Panel text is cloned from the classic page via `data-panel` attributes, so content lives in one place.
-
-
-A portfolio that plays like a game. Scrolling moves a pixel character along an XP bar, every section is a level, and the page rewards you with achievements as you read.
+A portfolio told as a story. The page stays fixed like the opening of a film or game, and scrolling plays it forward: a short "based on a true story" opening, then eight chapters from Kashmir to Dubai, ending with contact details.
 
 ## Run
-Extract the ZIP and open index.html in your browser. No installation or build step is required.
-You can also open this folder in VS Code and use Live Server.
+Open `index.html` in a browser. No install or build step. VS Code Live Server works too.
 
-## Edit
-- index.html: profile, projects, skills, experience, and contact links.
-- style.css: colors, typography, layout, and responsive styles. Main colors are in :root.
-- script.js: HUD, XP bar, level-ups, achievements, quest chain, skill tree, starfield and pointer effects.
+## Files
+- `index.html` — every chapter and the full résumé.
+- `style.css` — colours (in `:root`), typography, scenes and the résumé sheet.
+- `script.js` — the story engine.
 
-Keep all three files in the same folder. Google Fonts (Chakra Petch, Hanken Grotesk, Silkscreen) requires an internet connection; system fonts are used as a fallback.
+## How the story works
+Each chapter is a `<section class="scene">`:
+- `data-chapter` / `data-title` — label shown at the top and on the timeline.
+- `data-len` — how much scrolling the chapter takes, in screen heights.
+- `data-tone` — background glow colour: `lime`, `blue` or `amber`.
 
-## Game mechanics
-- **HUD and XP bar:** fixed at the top. The pixel character runs along the bar as you scroll and jumps on each level-up.
-- **Levels:** every `<section data-level data-name data-hue>` is a level. `data-name` is the label in the HUD and `data-hue` sets the colour tint of the world for that level.
-- **Achievements:** short toasts unlocked as you reach real milestones. Edit them in script.js (search for `award(`).
-- **Quest chain:** the HSE workflow steps tick off as you scroll through the featured project.
-- **Skill tree and campaign log:** a beam fills as you scroll and unlocks each skill and job checkpoint.
-- **Colour meaning:** gold is XP, coral is HP, blue is MP, mint is heal, violet is arcane. Accent colours are set per card with the `c-xp`, `c-hp`, `c-mp`, `c-heal` and `c-arcane` classes.
-- **Easter egg:** try the Konami code.
+Inside a chapter, elements react to how far through it the reader is (0 to 1):
+- `data-in=".3"` — appears at 30% and hides again when scrolling back.
+- `class="scrub" data-from=".1" data-to=".6"` — words light up one by one.
+- `data-count="88" data-from=".05" data-to=".45"` — the number counts up.
+- `data-fill=".2,.7"` — sets the CSS variable `--f` from 0 to 1, used for drawn lines.
 
-## Motion and accessibility
-All animation respects the visitor's "reduce motion" system setting: content shows immediately, achievements and particles are skipped, and the starfield stays still. Content stays visible if JavaScript fails to load. The lock-on cursor, card tilt and magnetic buttons only run on devices with a mouse.
+To add a chapter, copy a `<section class="scene">` block and change the text and numbers. The timeline dots are built automatically.
+
+## Always reachable
+- **Résumé** (top right) opens the full résumé at any point in the story.
+- **Skip story** jumps to the contact chapter; the timeline dots jump to any chapter. Page Up / Page Down move one chapter.
+- With "reduce motion" switched on, or without JavaScript, the chapters show as a normal scrolling page with the résumé at the end.
+
+Google Fonts (DM Sans, DM Serif Display) need an internet connection; system fonts are the fallback.
 
 ## Host
-Upload index.html, style.css, and script.js to any static web host.
+Upload `index.html`, `style.css` and `script.js` to any static host (GitHub Pages works).

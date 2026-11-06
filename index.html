@@ -2,217 +2,263 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0a0c1a">
-<meta name="description" content="Mohammad Himayat Ullah Bhat — Full Stack Developer in Dubai. ASP.NET Core, Angular, SQL Server and enterprise systems. Explore selected projects and experience.">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0d0b">
+<meta name="description" content="Mohammad Himayat Ullah Bhat — Full Stack Developer in Dubai. ASP.NET Core, Angular and SQL Server. A short story about the systems he builds.">
 <title>Himayat Bhat — Full Stack Developer</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230a0c1a'/%3E%3Crect x='6' y='10' width='52' height='44' fill='%23ffc53d'/%3E%3Ctext x='12' y='44' font-family='Arial' font-weight='bold' font-size='30' fill='%230a0c1a'%3Ehb%3C/text%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23d5fa52'/%3E%3Ctext x='10' y='44' font-family='Arial' font-weight='bold' font-size='34' fill='%23171916'%3Ehb%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Hanken+Grotesk:wght@400;500;600&family=Silkscreen:wght@400;700&display=swap">
 <link rel="stylesheet" href="style.css">
-<script>(function(){var d=document.documentElement;d.classList.add('js');var v=null;try{v=sessionStorage.getItem('view')}catch(e){}if(v!=='classic')d.classList.add('playing');setTimeout(function(){if(!window.__motion)d.classList.remove('js');if(!window.__game)d.classList.remove('playing')},2500)})()</script>
+<script>
+  // Story mode only with JS and full motion; otherwise the chapters render as a normal page.
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('js');
+    setTimeout(function () { if (!window.__story) document.documentElement.classList.remove('js'); }, 3000);
+  }
+</script>
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<canvas id="stars" aria-hidden="true"></canvas>
-<canvas id="burst" aria-hidden="true"></canvas>
+<a class="skip" href="#resume" data-open-resume>Skip to full résumé</a>
 
-<header class="hud">
-  <div class="hud-bar">
-    <a class="wordmark" href="#top" aria-label="Himayat Bhat home"><span class="badge">hb</span></a>
-    <div class="lv" aria-hidden="true"><b data-lv>LV 01</b><i data-stage-name>Title screen</i></div>
-    <nav aria-label="Main navigation"><a href="#work">Work</a><a href="#expertise">Expertise</a><a href="#experience">Experience</a></nav>
-    <a class="contact-nav" href="#contact">Let’s talk <span aria-hidden="true">↗</span></a>
-  </div>
-  <div class="xp" aria-hidden="true">
-    <div class="xp-track"><div class="xp-fill"></div><div class="xp-marks"></div></div>
-    <div class="sprite" id="sprite"></div>
-  </div>
-</header>
-<div class="toasts" aria-hidden="true"></div>
-
-<main id="main">
-<section class="hero wrap" id="top" data-level="1" data-name="Title screen" data-hue="228">
-  <div class="hero-top"><span class="player-name">Mohammad Himayat Ullah Bhat</span><span class="location">Dubai, UAE</span></div>
-  <div class="hero-layout">
-    <div>
-      <h1><span class="line" style="--n:18;--dl:.2s;--t:.9s"><span>Complex workflows.</span></span><span class="line" style="--n:10;--dl:1.15s;--t:.55s"><span>Considered</span></span><span class="line" style="--n:12;--dl:1.75s;--t:.65s"><span>engineering.<b class="caret" aria-hidden="true"></b></span></span></h1>
-      <div class="intro">
-        <p>I’m Himayat, a <strong>Full Stack Developer.</strong><br>I turn operational complexity into practical software—with .NET, Angular, and SQL Server.</p>
-        <a class="button" href="#work">Explore my work <span aria-hidden="true">↘</span></a>
-      </div>
-    </div>
-    <aside class="player-card panel c-xp">
-      <div class="card-top"><span>From requirement<br>to production</span></div>
-      <div class="big-number">88<span>+</span></div>
-      <p class="card-title">APIs delivered.<br>Real business behind each one.</p>
-      <div class="card-divider"></div>
-      <p class="card-caption">Safety. Engineering. People. Delivery.<br>Building across NAFFCO’s eConnect ecosystem.</p>
-      <div class="card-bottom"><span>Full stack, end to end</span><span>2024—26</span></div>
-    </aside>
-  </div>
-  <div class="hero-foot"><span>Currently building at <strong>NAFFCO FZCO</strong></span><span>ASP.NET Core <i>/</i> Angular <i>/</i> SQL Server</span><a class="start" href="#work">Scroll to start <i aria-hidden="true">▼</i></a></div>
-</section>
-
-<div class="marquee" aria-hidden="true"><div class="marquee-track"><span>ASP.NET Core</span><i>◆</i><span>Angular</span><i>◆</i><span>SQL Server</span><i>◆</i><span>SignalR</span><i>◆</i><span>TypeScript</span><i>◆</i><span>Dapper</span><i>◆</i><span>Firebase</span><i>◆</i><span>QuestPDF</span><i>◆</i><span>RxJS</span><i>◆</i><span>EF Core</span><i>◆</i><span>ASP.NET Core</span><i>◆</i><span>Angular</span><i>◆</i><span>SQL Server</span><i>◆</i><span>SignalR</span><i>◆</i><span>TypeScript</span><i>◆</i><span>Dapper</span><i>◆</i><span>Firebase</span><i>◆</i><span>QuestPDF</span><i>◆</i><span>RxJS</span><i>◆</i><span>EF Core</span><i>◆</i></div></div>
-
-<section class="stage work-section" id="work" data-level="2" data-name="Quest log" data-hue="256">
-  <div class="wrap">
-    <div class="section-head">
-      <div><span class="level-plate">Level 02</span><h2 data-spawn>Built for the<br>real world.</h2></div>
-      <p>Systems that carry a request, an incident, or a delivery all the way through.<br><span class="muted">Selected professional work, 2024–2026</span></p>
-    </div>
-
-    <article class="featured panel c-hp" data-spawn data-panel="hse">
-      <div class="project-story">
-        <div class="card-top"><span class="quest-tag">Main quest</span><span class="domain">Health &amp; Safety</span><span class="org">NAFFCO</span></div>
-        <h3>Accountability.<br>At every step.</h3>
-        <p>eConnect HSE brings observations and incidents into structured workflows—from reporting and investigation to corrective action and closure.</p>
-        <div class="tags"><span>ASP.NET Core</span><span>Angular</span><span>SQL Server</span><span>QuestPDF</span></div>
-        <details><summary>Explore the engineering <span>+</span></summary><div class="detail-body"><p>Built staged verification and approvals, role-based visibility, rejection paths, escalation, signatures, attachments, and PDF reports.</p><p>Implemented incident investigation, witness and injured-person records, corrective-action tracking, and manager/HOD approvals. The Incident module went live in July 2026.</p><p>Improved data access with stored procedures, execution-plan analysis, indexing, and server-side pagination.</p></div></details>
-      </div>
-      <div class="workflow" data-quest>
-        <div class="workflow-head"><span>Observation workflow</span><span class="quest-state" data-quest-state>4 steps</span></div>
-        <ol>
-          <li><span class="step-num">01</span><div><strong>Raise &amp; report</strong><small>Safety Officer</small></div><span class="step-label">Capture</span></li>
-          <li><span class="step-num">02</span><div><strong>Verify the observation</strong><small>Line Manager</small></div></li>
-          <li><span class="step-num">03</span><div><strong>Take corrective action</strong><small>Responsible Person</small></div></li>
-          <li><span class="step-num">04</span><div><strong>Review &amp; approve</strong><small>Line Manager → Manager → HOD</small></div><span class="step-label">Close</span></li>
-        </ol>
-        <div class="workflow-foot"><span>Defined ownership</span><span>Traceable approvals</span></div>
-      </div>
-    </article>
-
-    <div class="project-grid">
-      <article class="project-card panel c-mp" data-spawn data-panel="eng">
-        <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Engineering</span><span class="org">NAFFCO</span></div>
-        <h3>Requests with<br>a clear next step.</h3>
-        <p>ESL, DCD, Shop Drawing Requests, and project attendance. From reference generation and document uploads to engineer assignment and role-based tracking.</p>
-        <div class="tags"><span>Angular</span><span>Dapper</span><span>TVPs / T-SQL</span></div>
-        <details><summary>Engineering workflows <span>+</span></summary><div class="detail-body">Designed reference-number generation, transactional writes, engineer assignment, document handling, and permission-aware request lists.</div></details>
-      </article>
-      <article class="project-card panel c-heal" data-spawn data-panel="delivery">
-        <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Delivery operations</span><span class="org">NAFFCO</span></div>
-        <h3>From dispatch<br>to proof of delivery.</h3>
-        <p>ERP-linked delivery-note lookup, driver assignment, delivery status, e-signatures, and attachment handling in one operational workflow.</p>
-        <div class="tags"><span>ASP.NET Core</span><span>ERP integration</span><span>SQL Server</span></div>
-        <details><summary>Delivery management <span>+</span></summary><div class="detail-body">Stored driver details alongside delivery records, enforced proof-of-delivery attachments, and added status, driver, and date filters. Connected delivery data through read-only ERP queries.</div></details>
-      </article>
-      <article class="project-card panel c-xp" data-spawn data-panel="notify">
-        <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Shared infrastructure</span><span class="org">eConnect</span></div>
-        <h3>The right update.<br>The right destination.</h3>
-        <p>A central notification service with user targeting, Firebase push delivery, per-application unread counts, and mobile/web deep links.</p>
-        <div class="tags"><span>Firebase FCM</span><span>ASP.NET Core</span><span>SQL Server</span></div>
-        <details><summary>Notification infrastructure <span>+</span></summary><div class="detail-body">Built database-backed notification records, device-token integration, read-state tracking, pagination, and application-aware routing across enterprise modules.</div></details>
-      </article>
-      <article class="project-card panel c-arcane" data-spawn data-panel="realtime">
-        <div class="card-top"><span class="quest-tag">Side quest</span><span class="domain">Real-time systems</span><span class="org">NAFFCO</span></div>
-        <h3>Signals become<br>actionable information.</h3>
-        <p>AIGorizm safety monitoring: real-time fire-alarm and sensor-data ingestion, alarm classification, and SignalR updates.</p>
-        <div class="tags"><span>SignalR</span><span>ADO.NET</span><span>IoT</span></div>
-        <details><summary>Safety monitoring <span>+</span></summary><div class="detail-body">Developed real-time monitoring interfaces and backend processing that translate incoming sensor signals into classified alerts.</div></details>
-      </article>
-    </div>
-
-    <div class="additional-project" data-spawn data-panel="logic">
-      <div><span class="quest-tag dim">Earlier quest</span><span class="domain">Logic Hub</span></div>
-      <h3>Tour &amp; Travel +<br>Online Services</h3>
-      <p>End-to-end booking systems covering discovery, scheduling, payment, confirmation, and fulfillment. Layered ASP.NET Core services, responsive Angular interfaces, MySQL, and PostgreSQL.</p>
-    </div>
-
-    <div class="metrics" data-metrics>
-      <div class="c-xp" data-spawn><strong>88<span>+</span></strong><p>Production APIs</p><small>Delivered in 11 months at NAFFCO</small></div>
-      <div class="c-heal" data-spawn><strong>8<span>+</span></strong><p>Business modules</p><small>Across safety and enterprise operations</small></div>
-      <div class="c-mp" data-spawn><strong>~350<span>ms</span></strong><p>Observed API response</p><small>Incident creation with 4–7 files; one measured case</small></div>
-      <div class="c-hp" data-spawn><strong>20<span>K+</span></strong><p>Organizational context</p><small>Company scale, not measured app users</small></div>
-    </div>
-  </div>
-</section>
-
-<section class="stage expertise wrap" id="expertise" data-level="3" data-name="Skill tree" data-hue="200">
-  <div class="section-head">
-    <div><span class="level-plate">Level 03</span><h2 data-spawn>The full stack.<br>And the details.</h2></div>
-    <p>From a responsive interface to the query underneath it. I work across the layers that make a feature useful.</p>
-  </div>
-  <div class="tree" data-tree>
-    <div class="skill-row c-mp" data-spawn data-panel="skill-backend"><span class="gem" aria-hidden="true"></span><h3>Backend &amp; APIs</h3><div><p>C# · ASP.NET Core 8/9 · REST APIs · EF Core · Dapper · ADO.NET · LINQ · Mapster</p><small>Layered services, JWT authentication, role-based access, validation, exception handling, Serilog, IMemoryCache, and QuestPDF.</small></div></div>
-    <div class="skill-row c-heal" data-spawn data-panel="skill-frontend"><span class="gem" aria-hidden="true"></span><h3>Frontend</h3><div><p>Angular · TypeScript · RxJS · HTML &amp; CSS · PrimeNG · AG Grid</p><small>Responsive interfaces, route guards, lazy loading, forms, ECharts dashboards, Leaflet maps, and Bootstrap.</small></div></div>
-    <div class="skill-row c-xp" data-spawn data-panel="skill-data"><span class="gem" aria-hidden="true"></span><h3>Data &amp; performance</h3><div><p>SQL Server · T-SQL · MySQL · PostgreSQL</p><small>Stored procedures, transactions, CTEs, table-valued parameters, normalization, indexing, execution plans, and server-side pagination.</small></div></div>
-    <div class="skill-row c-arcane" data-spawn data-panel="skill-integration"><span class="gem" aria-hidden="true"></span><h3>Integration &amp; delivery</h3><div><p>SignalR · Firebase Cloud Messaging · Git · IIS · Postman · Swagger</p><small>Real-time updates, ERP integration, deep links, PDF generation, file uploads, production troubleshooting, and Windows/Linux deployment.</small></div></div>
-    <div class="skill-row c-hp in-progress" data-spawn data-panel="skill-cloud"><span class="gem" aria-hidden="true"></span><h3>Cloud &amp; growing skills <span class="state">In progress</span></h3><div><p>AWS knowledge · EC2 · S3 · Lambda · CI/CD concepts</p><small>Developing knowledge of GitHub Actions, CodePipeline, CodeBuild, and CodeDeploy. Exploring Kafka, RAG/Ollama, and domain-driven design.</small></div></div>
-  </div>
-</section>
-
-<section class="stage experience-section" id="experience" data-level="4" data-name="Campaign log" data-hue="278">
-  <div class="wrap experience-layout">
-    <div class="experience-title">
-      <span class="level-plate">Level 04</span>
-      <h2 data-spawn>Ownership<br>from day one.</h2>
-      <p>I work from initial requirements through database design, implementation, release, and the feedback that follows.</p>
-      <div class="experience-total"><strong>2+</strong><span>years building<br>production software</span></div>
-    </div>
-    <div class="jobs" data-trail>
-      <article class="job" data-spawn data-panel="job-naffco"><div class="job-date">Sep 2025 — Present <span>Dubai, UAE</span></div><h3>NAFFCO FZCO</h3><p class="role">Software Developer</p><ul><li>Delivered 88+ APIs and enterprise workflows spanning HSE, EMS, HR self-service, notifications, and delivery.</li><li>Owned Incident and Observation Management through multi-level approvals, corrective actions, escalation, signatures, and reporting.</li><li>Built ESL, DCD, Shop Drawing Requests, Shop Drawing Attendance, Chemical Logs, and Item Delivery workflows.</li><li>Designed and tuned SQL Server data access and supported production issues across backend and frontend layers.</li></ul></article>
-      <article class="job" data-spawn data-panel="job-logic"><div class="job-date">Apr 2024 — Jun 2025 <span>Srinagar, India</span></div><h3>Logic Hub Software Solutions</h3><p class="role">Software Developer</p><ul><li>Built Tour &amp; Travel and Online Services booking systems from initial requirements to complete application flows.</li><li>Implemented Controller–Service–Repository backends with ASP.NET Core and EF Core.</li><li>Created responsive Angular interfaces, route guards, lazy loading, database schemas, and authentication flows.</li></ul></article>
-      <div class="education" data-spawn data-panel="education"><div><span class="label">Education</span><h4>B.Voc — Management</h4><p>Central University of Kashmir · 2022</p></div><div><span class="label">Languages</span><p>English · Hindi · Urdu</p></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="stage contact wrap" id="contact" data-panel="contact" data-level="5" data-name="Final stage" data-hue="228">
-  <div class="contact-top"><span class="level-plate">Level 05</span><span>Open to Full Stack / .NET / Angular roles</span></div>
-  <h2 data-spawn>Good software<br>starts with a <a href="mailto:himayatb3@gmail.com">conversation.<span aria-hidden="true">↗</span></a></h2>
-  <div class="contact-links"><a href="mailto:himayatb3@gmail.com">himayatb3@gmail.com</a><a href="tel:+971561452089">+971 56 145 2089</a><a href="https://ae.linkedin.com/in/mohammad-himayat-ullah-bhat-910b18229" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></div>
-</section>
-</main>
-
-<footer class="wrap"><a class="wordmark" href="#top" aria-label="Back to top"><span class="badge">hb</span></a><span>© 2026 Mohammad Himayat Ullah Bhat</span><a href="#top">Back to top ↑</a></footer>
-
-<div id="game" class="game" tabindex="-1">
-  <canvas id="world" role="img" aria-label="Interactive portfolio game. Use the Classic view button for a regular page."></canvas>
-  <header class="ghud">
-    <div class="ghud-id"><span class="badge">hb</span><div class="lv"><b data-g-level>LV 01</b><i data-g-zone>Title screen</i></div></div>
-    <div class="ghud-stats">
-      <span class="stat" title="Tech stack collected"><i class="i-coin"></i><b data-g-coins>0/10</b><em>Stack</em></span>
-      <span class="stat" title="Bugs squashed"><i class="i-bug"></i><b data-g-bugs>0</b><em>Bugs</em></span>
-      <span class="stat explored" title="Doors, blocks and flags opened"><b data-g-explored>0/15</b><em>Explored</em><span class="meter"><i data-g-bar></i></span></span>
-    </div>
-    <div class="ghud-actions">
-      <button type="button" data-g-sound aria-pressed="true">Sound on</button>
-      <button type="button" data-g-classic>Classic view</button>
-      <button type="button" class="primary" data-g-talk>Let’s talk <span aria-hidden="true">↗</span></button>
-    </div>
-  </header>
-  <div class="g-hint" data-g-hint><span><kbd>←</kbd><kbd>→</kbd> move</span><span><kbd>Space</kbd> jump</span><span><kbd>E</kbd> open</span><span><kbd>M</kbd> sound</span></div>
-  <div class="zone-banner" data-g-banner aria-hidden="true"></div>
-  <div class="sr-only" aria-live="polite" data-g-live></div>
-  <div class="touch" aria-hidden="true">
-    <div class="dpad"><button type="button" data-t="left">◀</button><button type="button" data-t="right">▶</button></div>
-    <div class="abtns"><button type="button" data-t="act">E</button><button type="button" data-t="jump">▲</button></div>
-  </div>
-  <section id="start" class="start-screen" aria-labelledby="start-title" hidden>
-    <div class="start-card">
-      <span class="badge big">hb</span>
-      <h2 id="start-title">Himayat Bhat</h2>
-      <p class="start-role">Full Stack Developer in Dubai</p>
-      <p class="start-copy">My portfolio is a game. Run, jump, collect my tech stack, stomp a few bugs, and open the doors to see what I’ve built. Every project has something to try.</p>
-      <div class="start-actions">
-        <button type="button" class="btn-start" data-start="play">Press start</button>
-        <button type="button" class="btn-alt" data-start="classic">Classic view</button>
-      </div>
-      <p class="start-keys"><kbd>←</kbd><kbd>→</kbd> or <kbd>A</kbd><kbd>D</kbd> to move, <kbd>Space</kbd> to jump, <kbd>E</kbd> to open. On a phone, use the buttons.</p>
-    </div>
-  </section>
+<!-- Opening card, like the first seconds of a film -->
+<div class="opening" aria-hidden="true">
+  <div class="opening-mark">hb<span>✳</span></div>
+  <p class="opening-line">Based on a true story.</p>
 </div>
 
-<dialog id="panel" class="panel-dialog" aria-labelledby="panel-title">
-  <div class="panel-head"><h2 id="panel-title"></h2><button type="button" class="panel-close" aria-label="Close">✕</button></div>
-  <div class="panel-body"></div>
+<!-- Cinematic letterbox, opens as the story begins -->
+<div class="bars" aria-hidden="true"><i></i><i></i></div>
+<div class="glow" aria-hidden="true"><i></i><i></i></div>
+
+<header class="hud">
+  <a class="wordmark" href="#top" data-chapter-jump="0" aria-label="Back to the start">hb<span>✳</span></a>
+  <p class="hud-chapter" aria-live="polite"><span class="hud-num">Prologue</span><span class="hud-name"></span></p>
+  <div class="hud-actions">
+    <button class="hud-btn" type="button" data-open-resume>Résumé</button>
+    <button class="hud-btn ghost" type="button" data-skip>Skip story <span aria-hidden="true">↓</span></button>
+  </div>
+</header>
+
+<nav class="timeline" aria-label="Chapters"><div class="timeline-fill"></div><ol></ol></nav>
+<p class="cue" aria-hidden="true"><span>Scroll to begin</span><i></i></p>
+
+<main id="top" class="story">
+  <div class="stage">
+
+    <!-- PROLOGUE -->
+    <section class="scene s-prologue" data-chapter="Prologue" data-title="" data-len="1.5" data-tone="lime">
+      <div class="center narrow">
+        <p class="kicker" data-in="0">A story in eight chapters</p>
+        <p class="scrub display" data-from=".08" data-to=".62">Every piece of software begins as a problem someone lives with <em>every single day.</em></p>
+        <p class="sub" data-in=".66">This is the story of someone who builds the fix.</p>
+      </div>
+    </section>
+
+    <!-- I -->
+    <section class="scene s-origin" data-chapter="Chapter I" data-title="The beginning" data-len="1.7" data-tone="lime">
+      <div class="split">
+        <div>
+          <p class="kicker" data-in="0">Chapter I · Srinagar, Kashmir</p>
+          <h2 class="title" data-in=".06">It didn’t start<br>with <em>code.</em></h2>
+        </div>
+        <div class="stack-text">
+          <p class="scrub lead" data-from=".2" data-to=".5">A degree in Management from the Central University of Kashmir, 2022.</p>
+          <p class="scrub lead" data-from=".5" data-to=".8">Learning how organisations run made one thing clear: the hardest part is rarely the idea. It’s the <em>workflow</em> behind it.</p>
+        </div>
+      </div>
+      <div class="year" data-in=".1" aria-hidden="true">2022</div>
+    </section>
+
+    <!-- II -->
+    <section class="scene s-first" data-chapter="Chapter II" data-title="First builds" data-len="2" data-tone="blue">
+      <div class="center">
+        <p class="kicker" data-in="0">Chapter II · Logic Hub Software Solutions · Apr 2024</p>
+        <h2 class="title" data-in=".05">The first <em>real</em> systems.</h2>
+        <ol class="flow" data-fill=".22,.7">
+          <li data-in=".24"><span>01</span>Discover</li>
+          <li data-in=".33"><span>02</span>Schedule</li>
+          <li data-in=".42"><span>03</span>Pay</li>
+          <li data-in=".51"><span>04</span>Confirm</li>
+          <li data-in=".60"><span>05</span>Fulfil</li>
+        </ol>
+        <p class="sub wide" data-in=".72">Tour &amp; Travel and Online Services booking platforms, built from requirements to complete flows. Layered ASP.NET Core services, responsive Angular, MySQL and PostgreSQL.</p>
+      </div>
+    </section>
+
+    <!-- III -->
+    <section class="scene s-dubai" data-chapter="Chapter III" data-title="A bigger stage" data-len="1.7" data-tone="amber">
+      <div class="ghost-num" data-fill="0,1" aria-hidden="true">20K+</div>
+      <div class="center">
+        <p class="kicker" data-in="0">Chapter III · September 2025</p>
+        <h2 class="mega" data-in=".08"><em>Dubai.</em></h2>
+        <p class="lead center-text" data-in=".32">Software Developer at <strong>NAFFCO FZCO</strong>, a fire and life-safety company of 20,000+ people.</p>
+        <p class="sub center-text" data-in=".55">At this scale, a lost form isn’t paperwork. It’s a risk.</p>
+      </div>
+    </section>
+
+    <!-- IV -->
+    <section class="scene s-incident" data-chapter="Chapter IV" data-title="The incident" data-len="2.6" data-tone="amber">
+      <div class="split top">
+        <div>
+          <p class="kicker" data-in="0">Chapter IV · eConnect HSE</p>
+          <h2 class="title" data-in=".04">When something goes wrong on site, <em>someone has to own it.</em></h2>
+          <p class="sub" data-in=".14">Observations and incidents, carried from the first report to final closure, with signatures, attachments, escalation and PDF reports.</p>
+          <p class="live" data-in=".84"><i></i>Incident module live since July 2026</p>
+        </div>
+        <ol class="workflow" data-fill=".2,.78">
+          <li data-in=".22"><span class="wf-n">01</span><div><strong>Raise &amp; report</strong><small>Safety Officer</small></div><em>Capture</em></li>
+          <li data-in=".36"><span class="wf-n">02</span><div><strong>Verify the observation</strong><small>Line Manager</small></div></li>
+          <li data-in=".50"><span class="wf-n">03</span><div><strong>Take corrective action</strong><small>Responsible Person</small></div></li>
+          <li data-in=".64"><span class="wf-n">04</span><div><strong>Review &amp; approve</strong><small>Line Manager → Manager → HOD</small></div><em>Close</em></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- V -->
+    <section class="scene s-many" data-chapter="Chapter V" data-title="One becomes many" data-len="2" data-tone="lime">
+      <div class="center">
+        <p class="kicker" data-in="0">Chapter V · NAFFCO eConnect</p>
+        <h2 class="title" data-in=".04">One system <em>became many.</em></h2>
+        <ul class="modules">
+          <li data-in=".16"><b>Incidents</b><small>HSE</small></li>
+          <li data-in=".21"><b>Observations</b><small>HSE</small></li>
+          <li data-in=".26"><b>ESL &amp; DCD requests</b><small>Engineering</small></li>
+          <li data-in=".31"><b>Shop drawings</b><small>Engineering</small></li>
+          <li data-in=".36"><b>Item delivery</b><small>ERP · e-signatures</small></li>
+          <li data-in=".41"><b>Notifications</b><small>Firebase · deep links</small></li>
+          <li data-in=".46"><b>Fire-alarm monitoring</b><small>SignalR · IoT</small></li>
+          <li data-in=".51"><b>HR self-service</b><small>People</small></li>
+          <li data-in=".56"><b>Chemical logs</b><small>Safety</small></li>
+        </ul>
+        <p class="sub center-text" data-in=".7">Requests with a clear next step. Deliveries with proof. Alarms that become decisions.</p>
+      </div>
+    </section>
+
+    <!-- VI -->
+    <section class="scene s-numbers" data-chapter="Chapter VI" data-title="By the numbers" data-len="1.8" data-tone="lime">
+      <div class="center">
+        <p class="kicker" data-in="0">Chapter VI · Eleven months</p>
+        <p class="big"><span class="count" data-count="88" data-from=".06" data-to=".46">88</span><sup>+</sup></p>
+        <p class="lead center-text" data-in=".2">production APIs. Real business behind each one.</p>
+        <dl class="stats">
+          <div data-in=".5"><dt><span class="count" data-count="8" data-from=".5" data-to=".66">8</span>+</dt><dd>business modules</dd></div>
+          <div data-in=".58"><dt>~<span class="count" data-count="350" data-from=".58" data-to=".74">350</span><small>ms</small></dt><dd>incident creation with 4–7 files</dd></div>
+          <div data-in=".66"><dt><span class="count" data-count="2" data-from=".66" data-to=".8">2</span>+</dt><dd>years in production software</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- VII -->
+    <section class="scene s-layers" data-chapter="Chapter VII" data-title="Under the surface" data-len="2" data-tone="blue">
+      <div class="split">
+        <div>
+          <p class="kicker" data-in="0">Chapter VII · The full stack</p>
+          <h2 class="title" data-in=".04">From the button you click <em>to the query underneath it.</em></h2>
+          <p class="sub" data-in=".7">Stored procedures, execution plans, indexing and server-side pagination, so the screen stays fast when the data doesn’t stay small.</p>
+        </div>
+        <div class="layers">
+          <div class="layer" data-in=".18"><span>Interface</span><b>Angular · TypeScript · RxJS · PrimeNG · AG Grid</b></div>
+          <div class="layer" data-in=".32"><span>Services</span><b>C# · ASP.NET Core · EF Core · Dapper · SignalR · JWT</b></div>
+          <div class="layer" data-in=".46"><span>Data</span><b>SQL Server · T-SQL · TVPs · MySQL · PostgreSQL</b></div>
+          <div class="layer next" data-in=".6"><span>Next</span><b>AWS · CI/CD · Kafka · RAG</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIII -->
+    <section class="scene s-reveal" data-chapter="Chapter VIII" data-title="The developer" data-len="1.7" data-tone="lime">
+      <div class="center">
+        <p class="kicker" data-in="0">Chapter VIII · That’s the story so far</p>
+        <h2 class="name"><span data-in=".1">Mohammad</span> <span data-in=".17">Himayat</span> <span data-in=".24">Ullah</span> <span class="hl" data-in=".31">Bhat.</span></h2>
+        <p class="lead center-text" data-in=".48">Full Stack Developer in Dubai.<br><em>Complex workflows. Considered engineering.</em></p>
+      </div>
+    </section>
+
+    <!-- EPILOGUE -->
+    <section class="scene s-end" id="contact" data-chapter="Epilogue" data-title="What’s next" data-len="1.3" data-tone="lime">
+      <div class="center">
+        <p class="kicker" data-in="0">Open to Full Stack · .NET · Angular roles</p>
+        <h2 class="title big-title" data-in=".05">The next chapter starts with <a href="mailto:himayatb3@gmail.com"><em>a conversation.</em><span aria-hidden="true">↗</span></a></h2>
+        <ul class="contact" data-in=".2">
+          <li><a href="mailto:himayatb3@gmail.com">himayatb3@gmail.com</a></li>
+          <li><a href="tel:+971561452089">+971 56 145 2089</a></li>
+          <li><a href="https://ae.linkedin.com/in/mohammad-himayat-ullah-bhat-910b18229" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a></li>
+        </ul>
+        <div class="end-actions" data-in=".28">
+          <button class="btn" type="button" data-open-resume>Read the full résumé</button>
+          <button class="btn ghost" type="button" data-chapter-jump="0">Replay the story ↺</button>
+        </div>
+        <p class="credits" data-in=".35">© 2026 Mohammad Himayat Ullah Bhat</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Full résumé: always one click away, also the reading path for screen readers -->
+<dialog class="resume" id="resume" aria-labelledby="resume-title">
+  <div class="resume-inner">
+    <div class="resume-head">
+      <div>
+        <p class="kicker">Résumé</p>
+        <h2 id="resume-title">Mohammad Himayat Ullah Bhat</h2>
+        <p>Full Stack Developer · Dubai, UAE · <a href="mailto:himayatb3@gmail.com">himayatb3@gmail.com</a> · <a href="tel:+971561452089">+971 56 145 2089</a> · <a href="https://ae.linkedin.com/in/mohammad-himayat-ullah-bhat-910b18229" target="_blank" rel="noopener noreferrer">LinkedIn</a></p>
+      </div>
+      <button class="close" type="button" data-close-resume aria-label="Close résumé">✕</button>
+    </div>
+
+    <section>
+      <h3>Experience</h3>
+      <article>
+        <header><h4>NAFFCO FZCO · Software Developer</h4><span>Sep 2025 — Present · Dubai, UAE</span></header>
+        <ul>
+          <li>Delivered 88+ APIs and enterprise workflows spanning HSE, EMS, HR self-service, notifications, and delivery.</li>
+          <li>Owned Incident and Observation Management through multi-level approvals, corrective actions, escalation, signatures, and reporting. The Incident module went live in July 2026.</li>
+          <li>Built ESL, DCD, Shop Drawing Requests, Shop Drawing Attendance, Chemical Logs, and Item Delivery workflows.</li>
+          <li>Designed and tuned SQL Server data access and supported production issues across backend and frontend layers.</li>
+        </ul>
+      </article>
+      <article>
+        <header><h4>Logic Hub Software Solutions · Software Developer</h4><span>Apr 2024 — Jun 2025 · Srinagar, India</span></header>
+        <ul>
+          <li>Built Tour &amp; Travel and Online Services booking systems from initial requirements to complete application flows.</li>
+          <li>Implemented Controller–Service–Repository backends with ASP.NET Core and EF Core.</li>
+          <li>Created responsive Angular interfaces, route guards, lazy loading, database schemas, and authentication flows.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section>
+      <h3>Selected work</h3>
+      <dl class="work">
+        <div><dt>eConnect HSE</dt><dd>Observations and incidents in structured workflows: staged verification and approvals, role-based visibility, rejection paths, escalation, signatures, attachments, QuestPDF reports, investigation, witness and injured-person records, corrective actions.</dd></div>
+        <div><dt>Engineering requests</dt><dd>ESL, DCD, Shop Drawing Requests and attendance: reference-number generation, transactional writes with TVPs, engineer assignment, document handling, permission-aware lists.</dd></div>
+        <div><dt>Delivery operations</dt><dd>ERP-linked delivery-note lookup, driver assignment, status, e-signatures and enforced proof-of-delivery attachments, with status, driver and date filters.</dd></div>
+        <div><dt>Notification service</dt><dd>Central service with user targeting, Firebase push, per-application unread counts, read state, pagination and mobile/web deep links.</dd></div>
+        <div><dt>AIGorizm monitoring</dt><dd>Real-time fire-alarm and sensor-data ingestion, alarm classification and SignalR updates.</dd></div>
+        <div><dt>Booking platforms</dt><dd>Tour &amp; Travel and Online Services: discovery, scheduling, payment, confirmation and fulfilment with ASP.NET Core, Angular, MySQL and PostgreSQL.</dd></div>
+      </dl>
+    </section>
+
+    <section>
+      <h3>Skills</h3>
+      <dl class="work">
+        <div><dt>Backend &amp; APIs</dt><dd>C# · ASP.NET Core 8/9 · REST · EF Core · Dapper · ADO.NET · LINQ · Mapster · JWT · role-based access · Serilog · IMemoryCache · QuestPDF</dd></div>
+        <div><dt>Frontend</dt><dd>Angular · TypeScript · RxJS · HTML &amp; CSS · PrimeNG · AG Grid · ECharts · Leaflet · Bootstrap</dd></div>
+        <div><dt>Data &amp; performance</dt><dd>SQL Server · T-SQL · MySQL · PostgreSQL · stored procedures · transactions · CTEs · TVPs · indexing · execution plans · server-side pagination</dd></div>
+        <div><dt>Integration &amp; delivery</dt><dd>SignalR · Firebase Cloud Messaging · Git · IIS · Postman · Swagger · ERP integration · Windows/Linux deployment</dd></div>
+        <div><dt>Growing</dt><dd>AWS (EC2, S3, Lambda) · GitHub Actions · CodePipeline · Kafka · RAG/Ollama · domain-driven design</dd></div>
+      </dl>
+    </section>
+
+    <section class="two">
+      <div><h3>Education</h3><p>B.Voc — Management<br>Central University of Kashmir · 2022</p></div>
+      <div><h3>Languages</h3><p>English · Hindi · Urdu</p></div>
+    </section>
+  </div>
 </dialog>
-<button type="button" class="play-fab" id="play-fab" hidden>▶ Play the game</button>
-<script src="minigames.js"></script>
-<script src="game.js"></script>
+
 <script src="script.js"></script>
 </body>
 </html>
